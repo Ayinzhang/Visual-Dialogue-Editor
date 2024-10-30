@@ -1,0 +1,502 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4921233339002650379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400cf9f64ef11934db004540b94f0d45, type: 3}
+  m_Name: Check
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 56, y: -168}
+  ports:
+    keys:
+    - before
+    - after
+    - checkList
+    - checkList 0
+    - checkList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: -4921233339002650379}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: eventList 1
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -4921233339002650379}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: checkList
+      _node: {fileID: -4921233339002650379}
+      _typeQualifiedName: System.Collections.Generic.List`1[[CheckNode+CheckInfo,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: checkList 0
+      _node: {fileID: -4921233339002650379}
+      _typeQualifiedName: CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: inList 1
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: checkList 1
+      _node: {fileID: -4921233339002650379}
+      _typeQualifiedName: CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: inList 2
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: Check
+  obj: {fileID: 0}
+  objInstanceID: 43114
+  objPath: Demo Scene/Canvas/ChatPanel
+  compName: DialogueSystem
+  varName: cnt
+  varType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  checkList:
+  - checkType: 0
+    checkNum: 0
+  - checkType: 2
+    checkNum: 0
+--- !u!114 &-4733053032447576540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a2a97bbba94c04ba6f3f4892417358, type: 3}
+  m_Name: Option
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -232, y: -264}
+  ports:
+    keys:
+    - before
+    - after
+    - optionList
+    - optionList 0
+    - optionList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: -4733053032447576540}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 0
+        node: {fileID: -1819059237232150714}
+        reroutePoints: []
+      - fieldName: dialogueList 0
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -4733053032447576540}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList
+      _node: {fileID: -4733053032447576540}
+      _typeQualifiedName: System.Collections.Generic.List`1[[System.String, mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList 0
+      _node: {fileID: -4733053032447576540}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: optionList 1
+      _node: {fileID: -4733053032447576540}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: inList 1
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: Make Choices
+  optionList:
+  - 2
+  - 10
+--- !u!114 &-1819059237232150714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -648, y: -264}
+  ports:
+    keys:
+    - before
+    - after
+    - inList 0
+    - dialogueList 0
+    values:
+    - _fieldName: before
+      _node: {fileID: -1819059237232150714}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -1819059237232150714}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: -1819059237232150714}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 0
+      _node: {fileID: -1819059237232150714}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: Start dialogue
+  dialogueList:
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 2
+    context: 1 + 1 = , which one is the right answer?
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4761b0722dfc8aa4fb9515e0c645a9b1, type: 3}
+  m_Name: Demo Dialogue Graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -1819059237232150714}
+  - {fileID: -4733053032447576540}
+  - {fileID: 4006265045748941230}
+  - {fileID: -4921233339002650379}
+  - {fileID: 1769485216659402626}
+  names:
+  - ???
+  dataType: 0
+  optionInfo: []
+--- !u!114 &1769485216659402626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 472, y: -344}
+  ports:
+    keys:
+    - before
+    - after
+    - inList 0
+    - dialogueList 0
+    - inList 1
+    - dialogueList 1
+    - inList 2
+    - dialogueList 2
+    values:
+    - _fieldName: before
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: eventList 0
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 0
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: checkList 0
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 1
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 2
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: checkList 1
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 2
+      _node: {fileID: 1769485216659402626}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: 
+  dialogueList:
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context: Well... Think more carefully.
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context: Congratulations! Youget the right answer at one shot.
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context: Bingo, that is the right answer.
+--- !u!114 &4006265045748941230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b4234ffb006d674eb983421c5b52bb7, type: 3}
+  m_Name: Event
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 56, y: -392}
+  ports:
+    keys:
+    - before
+    - after
+    - inList 0
+    - eventList 0
+    - inList 1
+    - eventList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: optionList 0
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: eventList 0
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: optionList 1
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: eventList 1
+      _node: {fileID: 4006265045748941230}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: Event
+  eventList:
+  - obj: {fileID: 0}
+    objInstanceID: 48194
+    portType: 3
+    objPath: Demo Scene/Canvas/ChatPanel
+    compName: DialogueSystem
+    funcName: Print
+    declType: DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    paraNum: 0
+  - obj: {fileID: 0}
+    objInstanceID: 48194
+    portType: 3
+    objPath: Demo Scene/Canvas/ChatPanel
+    compName: DialogueSystem
+    funcName: Print
+    declType: DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    paraNum: 1

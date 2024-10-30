@@ -1,0 +1,922 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7156879366625017116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 40, y: -280}
+  ports:
+    keys:
+    - before
+    - after
+    - dialogueList
+    - inList 0
+    - dialogueList 0
+    - inList 1
+    - dialogueList 1
+    - inList 2
+    - dialogueList 2
+    - inList 3
+    - dialogueList 3
+    - inList 4
+    - dialogueList 4
+    - inList 5
+    - dialogueList 5
+    - inList 6
+    - dialogueList 6
+    - inList 7
+    - dialogueList 7
+    - inList 8
+    - dialogueList 8
+    - inList 9
+    - dialogueList 9
+    values:
+    - _fieldName: before
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: dialogueList
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: optionList 0
+        node: {fileID: -638595666157657635}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 0
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 1
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 2
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 2
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 3
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: optionList 1
+        node: {fileID: -638595666157657635}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 3
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 4
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 4
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 5
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 5
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 6
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 6
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 7
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 7
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 8
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 8
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 9
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 9
+      _node: {fileID: -7156879366625017116}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: -1608095426900796545}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: 
+  dialogueList:
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 1
+    context: "\u554A \u9019\u500B \u88CF\u9762\u6709\u756B\u4E86\u4E9B\u4EC0\u9EBD..."
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u55EF"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u53CD\u6B63\u7B49\u6703\u4E5F\u6703\u6254\u6389\u7684\u6240\u4EE5\u90A3\u6A23\u5C31\u597D\u4E86!"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 1
+    context: "\u6254\u6389...\u9019\u662F\u756B\u554A"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u662F\u4F60\u756B\u7684\u5427?"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u662F\u554A\u2014"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u771F\u53B2\u5BB3...\u9019\u7A2E\u756B\u6CD5..."
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u5230\u5E95\u600E\u6A23\u624D\u80FD\u756B\u51FA\u9019\u7A2E\u8272\u5F69\u5462..."
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u6254\u6389\u4EC0\u9EBD\u7684...\u771F\u662F\u592A\u6D6A\u8CBB\u4E86\uFF01"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 2
+    context: "\u4F60 \u4F60\u4E0D\u8981\u7684\u8A71\u5C31\u9001\u7D66\u6211\u5427!"
+--- !u!114 &-1608095426900796545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 424, y: -280}
+  ports:
+    keys:
+    - before
+    - after
+    - dialogueList
+    - inList 0
+    - dialogueList 0
+    - inList 1
+    - dialogueList 1
+    - inList 2
+    - dialogueList 2
+    - inList 3
+    - dialogueList 3
+    - inList 4
+    - dialogueList 4
+    - inList 5
+    - dialogueList 5
+    - inList 6
+    - dialogueList 6
+    - inList 7
+    - dialogueList 7
+    - inList 8
+    - dialogueList 8
+    - inList 9
+    - dialogueList 9
+    values:
+    - _fieldName: before
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: dialogueList
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 9
+        node: {fileID: -7156879366625017116}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 0
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 1
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 2
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 2
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 3
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 3
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 4
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 4
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 5
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 5
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 6
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 6
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 7
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 7
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 8
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 8
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 9
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 9
+      _node: {fileID: -1608095426900796545}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: 
+  dialogueList:
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 1
+    context: "\u8A92\u2014\u4F60\u8981\u4F86\u5E79\u561B"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u771F\u5947\u602A\u2014"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u4F46\u662F\u4E0D\u884C \u9019\u662F\u8981\u6254\u7684"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u8A92"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "...\u4E0D\u904E\u4F60\u8AAC\u60F3\u8981\u6211\u5F88\u9AD8\u8208"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u5C07\u4F86\u6703\u7E7C\u7E8C\u756B\u756B\u4E4B\u985E\u55CE?"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "...\u5514\u2014\u96D6\u7136\u60F3\u4F46\u662F\u6C92\u53EF\u80FD\u5427"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u70BA \u7232\u4EC0\u9EBD\u2014\uFF01\u660E\u660E\u756B\u7684\u90A3\u9EBD\u597D\uFF01"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u6BD4\u65B9\u8AAC\u50CF\u6211\u9019\u7A2E\u7A0B\u5EA6\u7684\u4EBA\u6EFF\u8857\u90FD\u662F"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u7136\u5F8C\u5728\u54EA\u88CF\u8CB7\u7684\u6703\u7E7C\u7E8C\u9032\u6B65\u7684\u4EBA\u4E5F\u591A\u5982\u5929\u4E0A\u7684\u7E41\u661F"
+--- !u!114 &-638595666157657635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a2a97bbba94c04ba6f3f4892417358, type: 3}
+  m_Name: Option
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -200, y: -280}
+  ports:
+    keys:
+    - before
+    - after
+    - optionList
+    - optionList 0
+    - optionList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: -638595666157657635}
+      _typeQualifiedName: OptionNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 6
+        node: {fileID: 7605061190542546627}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -638595666157657635}
+      _typeQualifiedName: OptionNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList
+      _node: {fileID: -638595666157657635}
+      _typeQualifiedName: System.Collections.Generic.List`1[[System.String, mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList 0
+      _node: {fileID: -638595666157657635}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: inList 0
+        node: {fileID: -7156879366625017116}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: optionList 1
+      _node: {fileID: -638595666157657635}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: inList 3
+        node: {fileID: -7156879366625017116}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: 
+  optionList:
+  - "\u5947\u602A\u7684\u4EBA..."
+  - "\u6254\u6389...?"
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4761b0722dfc8aa4fb9515e0c645a9b1, type: 3}
+  m_Name: Extra Dialogue Graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 7605061190542546627}
+  - {fileID: -638595666157657635}
+  - {fileID: -7156879366625017116}
+  - {fileID: -1608095426900796545}
+  names:
+  - "\u5149"
+  - "\u5343\u7E6A"
+  dataType: 0
+  optionInfo: []
+--- !u!114 &7605061190542546627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -584, y: -280}
+  ports:
+    keys:
+    - before
+    - after
+    - dialogueList
+    - inList 0
+    - dialogueList 0
+    - inList 1
+    - dialogueList 1
+    - inList 2
+    - dialogueList 2
+    - inList 3
+    - dialogueList 3
+    - inList 4
+    - dialogueList 4
+    - inList 5
+    - dialogueList 5
+    - inList 6
+    - dialogueList 6
+    values:
+    - _fieldName: before
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: dialogueList
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: inList 0
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 0
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 1
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 2
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 2
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 3
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 3
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 4
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 4
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 5
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 5
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 6
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 6
+      _node: {fileID: 7605061190542546627}
+      _typeQualifiedName: DialogueNode+DialogueInfo, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: -638595666157657635}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isMin: 0
+  abstruct: 
+  dialogueList:
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u5450 \u90A3\u662F...\u7D19\u98DB\u6A5F?"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u55EF"
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
+    person: 0
+    type: 0
+    context: "\u525B\u624D\u653E\u7684\u90A3\u4E9B?"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u55EF"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u6211\u672C\u4F86\u662F\u60F3\u6254\u6389\u4ED6\u5011\u7684"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 0
+    context: "\u4F46\u662F\u6211\u6C92\u6709\u52C7\u6C23\u53BB\u6495\u788E\u5B83\u5011"
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
+    person: 1
+    type: 2
+    context: "\u6240\u4EE5\u5C31\u96A8\u4FBF\u6298\u4E86 \u7136\u5F8C\u8B8A\u6210\u4E86\u9019\u6A23"
