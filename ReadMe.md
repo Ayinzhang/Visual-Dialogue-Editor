@@ -30,7 +30,7 @@ public struct DialogueInfo { public Sprite sprite; public string name, context; 
 public DialogueInfo dialogueInfo; 
 public List<string> optionInfo;
 public DataType Next(int num = -1) // -1: continue dialogue, 
-                                   //  0 ~ inf: choiced option's index that choiced
+                                   //  0 ~ inf: option's index that choiced
 
 //Useage
 public ScriptableObject graph; // Load your graph file
