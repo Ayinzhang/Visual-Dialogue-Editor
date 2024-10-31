@@ -11,7 +11,7 @@ public class DialogueSystem : MonoBehaviour
     Image chaImg;
     Text bgText;
     Text[] optionTests;
-    DialogueGraph chatGraph;
+    DialogueGraph dialogueGraph;
 
     bool option;
 
@@ -21,7 +21,7 @@ public class DialogueSystem : MonoBehaviour
         bgText = bg.GetComponentInChildren<Text>();
         optionTests = new Text[options.Length];
         for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>();
-        cha.SetActive(true); bg.SetActive(true); chatGraph = (DialogueGraph)Instantiate(graph); Next();
+        cha.SetActive(true); bg.SetActive(true); dialogueGraph = (DialogueGraph)Instantiate(graph); Next();
     }
 
     public void Next(int num = -1) 
@@ -34,16 +34,16 @@ public class DialogueSystem : MonoBehaviour
                 options[i].SetActive(false);
         }
 
-        switch (chatGraph.Next(num))
+        switch (dialogueGraph.Next(num))
         {
             case DialogueGraph.DataType.Dialogue:
-                chaImg.sprite = chatGraph.dialogueInfo.sprite;
-                bgText.text = chatGraph.dialogueInfo.name + ":\n" + chatGraph.dialogueInfo.context;
+                chaImg.sprite = dialogueGraph.dialogueInfo.sprite;
+                bgText.text = dialogueGraph.dialogueInfo.name + ":\n" + dialogueGraph.dialogueInfo.context;
                 break;
             case DialogueGraph.DataType.Option:
                 option = true;
                 for (int i = 0; i < options.Length; i++) options[i].SetActive(true);
-                for (int i = 0; i < chatGraph.optionInfo.Count; i++) optionTests[i].text = chatGraph.optionInfo[i];
+                for (int i = 0; i < dialogueGraph.optionInfo.Count; i++) optionTests[i].text = dialogueGraph.optionInfo[i];
                 break;
             case DialogueGraph.DataType.End:
                 cha.SetActive(false); bg.SetActive(false);
