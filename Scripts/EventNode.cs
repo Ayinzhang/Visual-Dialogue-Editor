@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using XNode;
 using System.Linq;
-using UnityEditor.ShaderGraph.Legacy;
 
 [Serializable][NodeWidth(350)]
 public class EventNode : Node 
