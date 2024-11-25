@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DialogueEditor;
 
 public class DialogueSystem : MonoBehaviour
 {

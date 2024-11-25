@@ -24,7 +24,10 @@
 &emsp;&emsp;You need to load the graph you make as an scriptable object, then instantiate to use it. Generally, you will only use the chatInfo, optionInfo, and Next(). Though the Next(), you can get the type and relative information of the current step. And the you can get the corresponding information though dialogueInfo or optionInfo.
 
 ```C#
-//Variables and functions
+// Importing namespace
+using DialogueEditor;
+
+// Variables and functions
 public enum DataType { End, Dialogue, Option }
 public struct DialogueInfo { public Sprite sprite; public string name, context; }
 public DialogueInfo dialogueInfo; 
@@ -32,7 +35,7 @@ public List<string> optionInfo;
 public DataType Next(int num = -1) // -1: continue dialogue, 
                                    //  0 ~ inf: option's index that choiced
 
-//Useage
+// Useage
 public ScriptableObject graph; // Load your graph file
 DialogueGraph dialogueGraph = (DialogueGraph)Instantiate(graph);
 switch (chatGraph.Next(num))
