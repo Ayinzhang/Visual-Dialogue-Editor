@@ -1,6 +1,6 @@
 ## Visual Dialogue Editor
 
-[中文版](README_zh.md)
+[中文版](ReadMe_zh.md)
 
 &emsp;&emsp;This is a simple visual dialogue editor based on [xNode](https://github.com/Siccity/xNode).  If you used something like Visual Scripting or Amplify Shader Editor before, you may be familiar with the operations.
 
