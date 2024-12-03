@@ -12,6 +12,7 @@
 <img src="image-20241030163037943.png" height = 200/>
 <img src="image-20241030162836377.png" height = 200/>
 </center>
+
 ### Edit
 
 &emsp;&emsp;There are four different kind of nodes in Dialogue Editor. They are dialogue node (the most commonly used one), option node (making choices is also usual in games), event node (Invoke some public functions), check node (check a public variable, different value will lead different direction). The items in dialogue node and event node can have both input port and output port, this makes the node more flexible. Overall the flow of information is clear, only one thing needs to be taken care of is that if one item have an output port connect nothing, then it is an end point. By the way if the node is too long, you can also press the "Show less" button, it will save the connection info and show all of them.
