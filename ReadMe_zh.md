@@ -1,6 +1,6 @@
 ## 可视化对话编辑器
 
-[English Version](README.md)
+[English Version](ReadMe.md)
 
 &emsp;&emsp;这是一个基于xNode的简单可视化对话编辑器。如果您之前使用过 Visual Scripting 或 Amplify Shader Editor 之类的东西，您可能对相关操作较为熟悉。
 
