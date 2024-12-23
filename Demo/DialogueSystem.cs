@@ -52,9 +52,4 @@ public class DialogueSystem : MonoBehaviour
                 break;
         }
     }
-
-    public void Print(int num)
-    {
-        print(num == 0 ? "Wrong": "right");
-    }
 }
