@@ -24,7 +24,7 @@
 
 ### 使用
 
-&emsp;&emsp;您需要将你制作的图表加载为可脚本化对象，然后实例化才能使用。一般情况下，您只需要使用chatInfo、optionInfo和Next()。通过Next()，你可以获取当前步骤的类型和相关信息。然后你可以通过dialogueInfo或optionInfo获取相应的信息。
+&emsp;&emsp;您需要将你制作的图表加载为可脚本化对象，然后实例化才能使用。一般情况下，您只需要使用*dialogueInfo*、*optionInfo*和*Next()*。通过*Next()*，你可以获取当前步骤的类型和相关信息。然后你可以通过*dialogueInfo*或*optionInfo*获取相应的信息，也可在运行时通过节点颜色变化了解当前读取位置及相关信息。
 
 ```C#
 // Importing namespace

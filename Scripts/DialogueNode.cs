@@ -20,6 +20,7 @@
         }
         [Input] public Nothing before;
         [HideInInspector] public bool isMin;
+        [HideInInspector] public int activeIndex = -1;
         [HideInInspector] public string abstruct;
         [HideInInspector] public List<DialogueInfo> dialogueList = new List<DialogueInfo>();
         [Output(connectionType = ConnectionType.Multiple)] public Nothing after;

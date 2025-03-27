@@ -24,7 +24,7 @@
 
 ### Use
 
-&emsp;&emsp;You need to load the graph you make as an scriptable object, then instantiate to use it. Generally, you will only use the chatInfo, optionInfo, and Next(). Though the Next(), you can get the type and relative information of the current step. And the you can get the corresponding information though dialogueInfo or optionInfo.
+&emsp;&emsp;You need to load the graph you make as an scriptable object, then instantiate to use it. Generally, you will only use the *chatInfo*, *optionInfo*, and *Next()*. Though the *Next()*, you can get the type and relative information of the current step. You can then get the corresponding information through *dialogueInfo* or *optionInfo*, and you can also learn the current reading position and related information through the node color change at runtime.
 
 ```C#
 // Importing namespace

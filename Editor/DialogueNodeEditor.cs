@@ -82,6 +82,8 @@ namespace DialogueEditor
 
             list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
+                if(index == node.activeIndex)
+                    EditorGUI.DrawRect(new Rect(rect.x - 2, rect.y - 2, rect.width + 4, rect.height + 4), new Color(0.2f, 0.8f, 0.2f, 0.3f));
                 SerializedProperty itemData = arrayData.GetArrayElementAtIndex(index), sprite = itemData.FindPropertyRelative("sprite"),
                 person = itemData.FindPropertyRelative("person"), type = itemData.FindPropertyRelative("type"),
                 context = itemData.FindPropertyRelative("context");
