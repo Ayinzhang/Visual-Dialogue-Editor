@@ -3,12 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using UnityEditor.SceneManagement;
-    using UnityEditor;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
     using XNode;
-    using System.Linq;
 
     [Serializable]
     [NodeWidth(350)]
@@ -39,17 +35,9 @@
 
             public void RefreshInfo()
             {
-                UnityEngine.Object o = EditorUtility.InstanceIDToObject(objInstanceID);
-                if (o is GameObject go) obj = go;
-                else if (obj == null && objPath != null)
+                if (obj == null && objPath != null)
                 {
                     string[] names = objPath.Split('/');
-                    Scene scene = SceneManager.GetSceneByName(names[0]);
-                    if (!scene.IsValid() || !scene.isLoaded)
-                    {
-                        string scenePath = AssetDatabase.FindAssets("t:Scene").Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(path => path.EndsWith(names[0] + ".unity"));
-                        if (!string.IsNullOrEmpty(scenePath)) scene = EditorSceneManager.OpenScene(scenePath);
-                    }
 
                     Transform trans = null;
                     for (int j = 1; j < names.Length; j++)

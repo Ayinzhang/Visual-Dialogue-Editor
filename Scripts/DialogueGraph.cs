@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using UnityEngine;
     using XNode;
-    using XNodeEditor;
 
     [Serializable, CreateAssetMenu(fileName = "New Dialogue Graph", menuName = "Dialogue Graph")]
     public class DialogueGraph : NodeGraph
@@ -87,7 +86,6 @@
             }
 
             if (node is EventNode || node is CheckNode) MoveOn();
-            else if (NodeEditorWindow.current != null) NodeEditorWindow.current.Repaint();
         }
 
         void GetNodeAndIndex(string s)
