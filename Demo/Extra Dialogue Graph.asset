@@ -18,7 +18,6 @@ MonoBehaviour:
     keys:
     - before
     - after
-    - dialogueList
     - inList 0
     - dialogueList 0
     - inList 1
@@ -42,8 +41,8 @@ MonoBehaviour:
     values:
     - _fieldName: before
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -51,21 +50,11 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: after
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: dialogueList
-      _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: inList 0
@@ -258,48 +247,69 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   isMin: 0
+  activeIndex: -1
   abstruct: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 1
     context: "\u554A \u9019\u500B \u88CF\u9762\u6709\u756B\u4E86\u4E9B\u4EC0\u9EBD..."
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u55EF"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u53CD\u6B63\u7B49\u6703\u4E5F\u6703\u6254\u6389\u7684\u6240\u4EE5\u90A3\u6A23\u5C31\u597D\u4E86!"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 1
     context: "\u6254\u6389...\u9019\u662F\u756B\u554A"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u662F\u4F60\u756B\u7684\u5427?"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u662F\u554A\u2014"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u771F\u53B2\u5BB3...\u9019\u7A2E\u756B\u6CD5..."
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u5230\u5E95\u600E\u6A23\u624D\u80FD\u756B\u51FA\u9019\u7A2E\u8272\u5F69\u5462..."
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u6254\u6389\u4EC0\u9EBD\u7684...\u771F\u662F\u592A\u6D6A\u8CBB\u4E86\uFF01"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 2
     context: "\u4F60 \u4F60\u4E0D\u8981\u7684\u8A71\u5C31\u9001\u7D66\u6211\u5427!"
+    localizedContext:
+      translations: []
 --- !u!114 &-1608095426900796545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +328,6 @@ MonoBehaviour:
     keys:
     - before
     - after
-    - dialogueList
     - inList 0
     - dialogueList 0
     - inList 1
@@ -342,8 +351,8 @@ MonoBehaviour:
     values:
     - _fieldName: before
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -351,21 +360,11 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: after
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: dialogueList
-      _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: inList 0
@@ -552,48 +551,69 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   isMin: 0
+  activeIndex: -1
   abstruct: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 1
     context: "\u8A92\u2014\u4F60\u8981\u4F86\u5E79\u561B"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u771F\u5947\u602A\u2014"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u4F46\u662F\u4E0D\u884C \u9019\u662F\u8981\u6254\u7684"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u8A92"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "...\u4E0D\u904E\u4F60\u8AAC\u60F3\u8981\u6211\u5F88\u9AD8\u8208"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u5C07\u4F86\u6703\u7E7C\u7E8C\u756B\u756B\u4E4B\u985E\u55CE?"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "...\u5514\u2014\u96D6\u7136\u60F3\u4F46\u662F\u6C92\u53EF\u80FD\u5427"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u70BA \u7232\u4EC0\u9EBD\u2014\uFF01\u660E\u660E\u756B\u7684\u90A3\u9EBD\u597D\uFF01"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u6BD4\u65B9\u8AAC\u50CF\u6211\u9019\u7A2E\u7A0B\u5EA6\u7684\u4EBA\u6EFF\u8857\u90FD\u662F"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u7136\u5F8C\u5728\u54EA\u88CF\u8CB7\u7684\u6703\u7E7C\u7E8C\u9032\u6B65\u7684\u4EBA\u4E5F\u591A\u5982\u5929\u4E0A\u7684\u7E41\u661F"
+    localizedContext:
+      translations: []
 --- !u!114 &-638595666157657635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,8 +638,8 @@ MonoBehaviour:
     values:
     - _fieldName: before
       _node: {fileID: -638595666157657635}
-      _typeQualifiedName: OptionNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: dialogueList 6
         node: {fileID: 7605061190542546627}
@@ -630,8 +650,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: after
       _node: {fileID: -638595666157657635}
-      _typeQualifiedName: OptionNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
@@ -644,7 +664,7 @@ MonoBehaviour:
         Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       connections: []
       _direction: 1
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: optionList 0
@@ -656,7 +676,7 @@ MonoBehaviour:
         node: {fileID: -7156879366625017116}
         reroutePoints: []
       _direction: 1
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
     - _fieldName: optionList 1
@@ -668,14 +688,18 @@ MonoBehaviour:
         node: {fileID: -7156879366625017116}
         reroutePoints: []
       _direction: 1
-      _connectionType: 1
+      _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
   isMin: 0
+  isActive: 0
   abstruct: 
   optionList:
   - "\u5947\u602A\u7684\u4EBA..."
   - "\u6254\u6389...?"
+  localizedOptions:
+  - translations: []
+  - translations: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,9 +717,15 @@ MonoBehaviour:
   - {fileID: -638595666157657635}
   - {fileID: -7156879366625017116}
   - {fileID: -1608095426900796545}
-  names:
+  speakers:
   - "\u5149"
   - "\u5343\u7E6A"
+  languages:
+  - Chinese
+  localizedSpeakers:
+  - translations: []
+  - translations: []
+  editorLanguageIndex: 0
   dataType: 0
   optionInfo: []
 --- !u!114 &7605061190542546627
@@ -716,7 +746,6 @@ MonoBehaviour:
     keys:
     - before
     - after
-    - dialogueList
     - inList 0
     - dialogueList 0
     - inList 1
@@ -734,8 +763,8 @@ MonoBehaviour:
     values:
     - _fieldName: before
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -743,21 +772,11 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: after
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: dialogueList
-      _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueNode+DialogueInfo,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: inList 0
@@ -890,33 +909,48 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   isMin: 0
+  activeIndex: -1
   abstruct: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u5450 \u90A3\u662F...\u7D19\u98DB\u6A5F?"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u55EF"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context: "\u525B\u624D\u653E\u7684\u90A3\u4E9B?"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u55EF"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u6211\u672C\u4F86\u662F\u60F3\u6254\u6389\u4ED6\u5011\u7684"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context: "\u4F46\u662F\u6211\u6C92\u6709\u52C7\u6C23\u53BB\u6495\u788E\u5B83\u5011"
+    localizedContext:
+      translations: []
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 2
     context: "\u6240\u4EE5\u5C31\u96A8\u4FBF\u6298\u4E86 \u7136\u5F8C\u8B8A\u6210\u4E86\u9019\u6A23"
+    localizedContext:
+      translations: []

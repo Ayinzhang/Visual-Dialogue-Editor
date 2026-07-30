@@ -30,6 +30,9 @@ MonoBehaviour:
       - fieldName: eventList 1
         node: {fileID: 4006265045748941230}
         reroutePoints: []
+      - fieldName: after
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -38,14 +41,23 @@ MonoBehaviour:
       _node: {fileID: -4921233339002650379}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: inList 1
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      - fieldName: inList 2
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      - fieldName: before
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: checkList
       _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: System.Collections.Generic.List`1[[CheckNode+CheckInfo,
+      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueEditor.CheckNode+CheckInfo,
         Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
         mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       connections: []
@@ -55,10 +67,13 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: checkList 0
       _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
+      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: inList 1
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      - fieldName: before
         node: {fileID: 1769485216659402626}
         reroutePoints: []
       _direction: 1
@@ -67,20 +82,23 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: checkList 1
       _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
+      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: inList 2
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      - fieldName: before
         node: {fileID: 1769485216659402626}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  isMin: 0
+  isMin: 1
   abstruct: Check
   obj: {fileID: 0}
-  objInstanceID: 43114
+  objGlobalId: 
   objPath: Demo Scene/Canvas/ChatPanel
   compName: DialogueSystem
   varName: cnt
@@ -123,6 +141,12 @@ MonoBehaviour:
       - fieldName: dialogueList 0
         node: {fileID: 1769485216659402626}
         reroutePoints: []
+      - fieldName: after
+        node: {fileID: -1819059237232150714}
+        reroutePoints: []
+      - fieldName: after
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -131,7 +155,16 @@ MonoBehaviour:
       _node: {fileID: -4733053032447576540}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      - fieldName: inList 1
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      - fieldName: before
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -154,6 +187,9 @@ MonoBehaviour:
       - fieldName: inList 0
         node: {fileID: 4006265045748941230}
         reroutePoints: []
+      - fieldName: before
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -166,15 +202,24 @@ MonoBehaviour:
       - fieldName: inList 1
         node: {fileID: 4006265045748941230}
         reroutePoints: []
+      - fieldName: before
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  isMin: 0
+  isMin: 1
+  isActive: 1
   abstruct: Make Choices
   optionList:
   - 2
   - 10
+  localizedOptions:
+  - translations:
+    - 2
+  - translations:
+    - 10
 --- !u!114 &-1819059237232150714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,7 +254,10 @@ MonoBehaviour:
       _node: {fileID: -1819059237232150714}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: before
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -235,13 +283,17 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  isMin: 0
+  isMin: 1
+  activeIndex: -1
   abstruct: Start dialogue
   dialogueList:
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 2
     context: 1 + 1 = , which one is the right answer?
+    localizedContext:
+      translations:
+      - "\u8111\u7B4B\u6025\u8F6C\u5F2F\uFF0C1+1\u7B49\u4E8E\u51E0\u5462"
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,8 +312,15 @@ MonoBehaviour:
   - {fileID: 4006265045748941230}
   - {fileID: -4921233339002650379}
   - {fileID: 1769485216659402626}
-  names:
+  speakers:
   - ???
+  languages:
+  - English
+  - Chinese
+  localizedSpeakers:
+  - translations:
+    - 
+  editorLanguageIndex: 0
   dataType: 0
   optionInfo: []
 --- !u!114 &1769485216659402626
@@ -277,7 +336,7 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 472, y: -344}
+  position: {x: 488, y: -280}
   ports:
     keys:
     - before
@@ -293,7 +352,22 @@ MonoBehaviour:
       _node: {fileID: 1769485216659402626}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: eventList 0
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      - fieldName: after
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      - fieldName: checkList 0
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      - fieldName: after
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      - fieldName: checkList 1
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -302,7 +376,10 @@ MonoBehaviour:
       _node: {fileID: 1769485216659402626}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: before
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -313,6 +390,9 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: eventList 0
+        node: {fileID: 4006265045748941230}
+        reroutePoints: []
+      - fieldName: after
         node: {fileID: 4006265045748941230}
         reroutePoints: []
       _direction: 0
@@ -339,6 +419,9 @@ MonoBehaviour:
       - fieldName: checkList 0
         node: {fileID: -4921233339002650379}
         reroutePoints: []
+      - fieldName: after
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -360,6 +443,9 @@ MonoBehaviour:
       - fieldName: checkList 1
         node: {fileID: -4921233339002650379}
         reroutePoints: []
+      - fieldName: after
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -373,21 +459,31 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  isMin: 0
+  isMin: 1
+  activeIndex: -1
   abstruct: 
   dialogueList:
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
     context: Well... Think more carefully.
+    localizedContext:
+      translations:
+      - "\u989D\uFF0C\u518D\u591A\u60F3\u60F3\u5427"
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
     context: Congratulations! Youget the right answer at one shot.
+    localizedContext:
+      translations:
+      - "\u54C7\uFF0C\u4E00\u6B21\u6210\u529F"
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
     context: Bingo, that is the right answer.
+    localizedContext:
+      translations:
+      - "\u5BF9\u4E86\uFF0C\u8FD9\u624D\u662F\u6B63\u786E\u7B54\u6848"
 --- !u!114 &4006265045748941230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +497,7 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 56, y: -392}
+  position: {x: 56, y: -376}
   ports:
     keys:
     - before
@@ -415,7 +511,16 @@ MonoBehaviour:
       _node: {fileID: 4006265045748941230}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: optionList 0
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      - fieldName: after
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      - fieldName: optionList 1
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -424,7 +529,16 @@ MonoBehaviour:
       _node: {fileID: 4006265045748941230}
       _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
+      - fieldName: before
+        node: {fileID: -4921233339002650379}
+        reroutePoints: []
+      - fieldName: before
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -435,6 +549,9 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: optionList 0
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      - fieldName: after
         node: {fileID: -4733053032447576540}
         reroutePoints: []
       _direction: 0
@@ -449,6 +566,9 @@ MonoBehaviour:
       - fieldName: inList 0
         node: {fileID: 1769485216659402626}
         reroutePoints: []
+      - fieldName: before
+        node: {fileID: 1769485216659402626}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -459,6 +579,9 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: optionList 1
+        node: {fileID: -4733053032447576540}
+        reroutePoints: []
+      - fieldName: after
         node: {fileID: -4733053032447576540}
         reroutePoints: []
       _direction: 0
@@ -477,26 +600,26 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  isMin: 0
+  isMin: 1
   abstruct: Event
   eventList:
   - obj: {fileID: 0}
-    objInstanceID: 48194
     portType: 3
+    objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
     objPath: Demo Scene/Canvas/ChatPanel
     compName: DialogueSystem
     funcName: Print
-    declType: DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    declType: DialogueEditor.DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 0
   - obj: {fileID: 0}
-    objInstanceID: 48194
     portType: 3
+    objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
     objPath: Demo Scene/Canvas/ChatPanel
     compName: DialogueSystem
     funcName: Print
-    declType: DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    declType: DialogueEditor.DialogueSystem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 1

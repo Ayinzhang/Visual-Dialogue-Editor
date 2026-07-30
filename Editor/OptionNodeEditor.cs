@@ -9,9 +9,9 @@
     using static XNode.NodePort;
 
     [CustomNodeEditor(typeof(OptionNode))]
-    public class OpytionNodeEditor : NodeEditor
+    public class OptionNodeEditor : NodeEditor
     {
-        OptionNode node;
+        OptionNode node; DialogueGraph dialogGraph;
         NodePort before, after;
 
         public override void OnCreate()
@@ -23,8 +23,8 @@
         public override void OnBodyGUI()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Before"), new GUILayoutOption[] { GUILayout.MinWidth(30) });
-            if (node.isMin) EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, new GUILayoutOption[] { GUILayout.MinWidth(30) });
+            EditorGUILayout.LabelField(new GUIContent("Before"), GUILayout.MinWidth(30));
+            if (node.isMin) EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
             EditorGUILayout.EndHorizontal();
             if (before == null || after == null) GetPorts();
             Rect rect = GUILayoutUtility.GetLastRect();
@@ -62,7 +62,13 @@
         //Init ReorderableList
         void InitList(ReorderableList list)
         {
-            SerializedProperty arrayData = serializedObject.FindProperty("optionList");
+            SerializedProperty arrayData = serializedObject.FindProperty("optionList"), localizedData = serializedObject.FindProperty("localizedOptions");
+            int reorderableListIndex = -1;
+            var defaultSelect = list.onSelectCallback;
+            var defaultReorder = list.onReorderCallback;
+            var defaultAdd = list.onAddCallback;
+            var defaultRemove = list.onRemoveCallback;
+            if (dialogGraph == null) dialogGraph = window.graph as DialogueGraph;
 
             list.drawHeaderCallback = (Rect rect) =>
             {
@@ -76,13 +82,16 @@
 
             list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                if(node.isActive)
+                if (EditorApplication.isPlaying && node.isActive)
                     EditorGUI.DrawRect(new Rect(rect.x - 2, rect.y - 2, rect.width + 4, rect.height + 4), new Color(0.2f, 0.8f, 0.2f, 0.3f));
-                SerializedProperty itemData = arrayData.GetArrayElementAtIndex(index);
                 float padding = 5f, fieldHeight = EditorGUIUtility.singleLineHeight;
 
                 Rect textRect = new Rect(rect.x, rect.y, rect.width - padding, fieldHeight * 1.5f);
-                itemData.stringValue = EditorGUI.TextArea(textRect, itemData.stringValue, EditorStyles.wordWrappedLabel);
+                int languageIndex = dialogGraph.LanguageIndex;
+                SerializedProperty option = arrayData.GetArrayElementAtIndex(index);
+                if (languageIndex > 0) option = localizedData.GetArrayElementAtIndex(index)
+                    .FindPropertyRelative("translations").GetArrayElementAtIndex(languageIndex - 1);
+                option.stringValue = EditorGUI.TextArea(textRect, option.stringValue, EditorStyles.wordWrappedLabel);
 
                 NodePort port = node.GetOutputPort("optionList " + index);
                 if (port != null)
@@ -94,14 +103,46 @@
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update();
             };
+
+            list.onSelectCallback = (ReorderableList reorderableList) =>
+            {
+                reorderableListIndex = reorderableList.index;
+                defaultSelect?.Invoke(reorderableList);
+            };
+
+            list.onReorderCallback = (ReorderableList reorderableList) =>
+            {
+                Undo.RecordObject(node, "Reorder localized options");
+                defaultReorder?.Invoke(reorderableList);
+                serializedObject.Update();
+                localizedData.MoveArrayElement(reorderableListIndex, reorderableList.index);
+                serializedObject.ApplyModifiedProperties();
+            };
+
+            list.onAddCallback = (ReorderableList reorderableList) =>
+            {
+                defaultAdd?.Invoke(reorderableList);
+                node.EnsureLocalizationData(dialogGraph.Languages.Count);
+                EditorUtility.SetDirty(node);
+            };
+
+            list.onRemoveCallback = (ReorderableList reorderableList) =>
+            {
+                int removedIndex = reorderableList.index;
+                Undo.RecordObject(node, "Remove localized option");
+                defaultRemove?.Invoke(reorderableList);
+                serializedObject.Update();
+                localizedData.DeleteArrayElementAtIndex(removedIndex);
+                serializedObject.ApplyModifiedProperties();
+            };
         }
 
         void GetPorts()
         {
             foreach (NodePort port in target.Ports)
             {
-                if (port.fieldName.Equals("before")) before = port;
-                else if (port.fieldName.Equals("after")) after = port;
+                if (port.fieldName == "before") before = port;
+                else if (port.fieldName == "after") after = port;
             }
         }
     }

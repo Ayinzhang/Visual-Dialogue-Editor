@@ -6,7 +6,7 @@
 
 ### Create
 
-&emsp;&emsp;Right click and choose "Create/Dialogue Graph", you will get a file named New Dialogue Graph. Before we double click the file to edit it, we can add name to the file's list in the inspector so that we can dropdown to select name in dialogue node later.
+&emsp;&emsp;Right click and choose "Create/Dialogue Graph", you will get a file named New Dialogue Graph. Before we double click the file to edit it, we can add languages/name to the file's list in the inspector so that we can dropdown to select languages/name in dialogue node later.
 
 <center class="half">
 <img src="image-20241030163037943.png" height = 200/>
@@ -41,6 +41,7 @@ public DataType Next(int num = -1) // -1: continue dialogue,
 // Useage
 public ScriptableObject graph; // Load your graph file
 DialogueGraph dialogueGraph = (DialogueGraph)Instantiate(graph);
+dialogueGraph.SetLanguage(languageIndex); // Choose the language
 switch (chatGraph.Next(num))
 {
     case DialogueGraph.DataType.Dialogue:

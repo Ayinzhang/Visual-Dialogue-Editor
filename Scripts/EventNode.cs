@@ -30,55 +30,18 @@
         [Serializable]
         public class FuncInfo
         {
-            public GameObject obj; [HideInInspector] public int objInstanceID; [HideInInspector] public PortType portType;
-            [HideInInspector] public string objPath, compName, funcName, declType, paraType, paraNum;
+            public GameObject obj; [HideInInspector] public PortType portType;
+            [HideInInspector] public string objGlobalId, objPath, compName, funcName, declType, paraType, paraNum;
 
-            public void RefreshInfo()
+            public MethodInfo RefreshInfo()
             {
-                if (obj == null && objPath != null)
-                {
-                    string[] names = objPath.Split('/');
-
-                    Transform trans = null;
-                    for (int j = 1; j < names.Length; j++)
-                    {
-                        trans = j == 1 ? GameObject.Find(names[j])?.transform : trans.Find(names[j]);
-                        if (trans == null) break;
-                    }
-                    if (trans != null) obj = trans.gameObject;
-                }
-
-                if (obj != null)
-                {
-                    Component targetComponent = obj.GetComponent(compName);
-                    if (targetComponent == null)
-                    {
-                        compName = funcName = declType = paraType = paraNum = null;
-                        return;
-                    }
-
-                    MethodInfo targetMethod = targetComponent.GetType().GetMethod(funcName);
-                    if (targetMethod == null || targetMethod.GetParameters().Length > 1)
-                    {
-                        compName = funcName = declType = paraType = paraNum = null;
-                        return;
-                    }
-
-                    ParameterInfo[] parameters = targetMethod.GetParameters();
-                    if (parameters.Length == 1)
-                    {
-                        Type paramType = parameters[0].ParameterType;
-                        if (paramType.AssemblyQualifiedName != paraType)
-                            paraType = paraNum = null;
-                    }
-                    else
-                        paraType = paraNum = null;
-                }
-                else
-                    compName = funcName = declType = paraType = paraNum = null;
+                obj = SceneObjectReference.Find(obj, objPath);
+                MethodInfo method = GetMethodInfo();
+                if (obj != null && method == null) compName = funcName = declType = paraType = paraNum = null;
+                return method;
             }
 
-            public MethodInfo GetMethodInfo()
+            MethodInfo GetMethodInfo()
             {
                 if (obj == null || string.IsNullOrEmpty(funcName) || string.IsNullOrEmpty(declType)) return null;
 
@@ -88,68 +51,30 @@
                 Component component = obj.GetComponent(componentType);
                 if (component == null) return null;
 
-                Type paramType = null;
-                if (!string.IsNullOrEmpty(paraType))
-                {
-                    paramType = Type.GetType(paraType);
-                    if (paramType == null) return null;
-                }
-
-                return paramType != null
-                    ? componentType.GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { paramType }, null)
-                    : componentType.GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                Type paramType = string.IsNullOrEmpty(paraType) ? null : Type.GetType(paraType);
+                if (!string.IsNullOrEmpty(paraType) && paramType == null) return null;
+                return componentType.GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                    null, paramType == null ? Type.EmptyTypes : new Type[] { paramType }, null);
             }
 
             public void InvokeMethod()
             {
-                //Get the method info
-                RefreshInfo();
-                if (obj == null || string.IsNullOrEmpty(funcName) || string.IsNullOrEmpty(declType)) return;
-
-                Type componentType = Type.GetType(declType);
-                if (componentType == null) return;
-
-                Component component = obj.GetComponent(componentType);
-                if (component == null) return;
-
-                Type paramType = null;
-                if (!string.IsNullOrEmpty(paraType))
-                {
-                    paramType = Type.GetType(paraType);
-                    if (paramType == null) return;
-                }
-
-                MethodInfo methodInfo = paramType != null
-                    ? componentType.GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { paramType }, null)
-                    : componentType.GetMethod(funcName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
+                MethodInfo methodInfo = RefreshInfo();
                 if (methodInfo == null) { Debug.LogError("Can't find designated method"); return; }
 
-                //Prepare the parameter
                 object parameter = null;
-                if (!string.IsNullOrEmpty(paraType))
+                ParameterInfo[] parameters = methodInfo.GetParameters();
+                if (parameters.Length == 1)
                 {
-                    if (paramType == typeof(int) || paramType == typeof(bool))
-                    {
-                        int intValue = int.Parse(paraNum);
-                        parameter = intValue;
-                    }
-                    else if (paramType == typeof(float) || paramType == typeof(double))
-                    {
-                        double doubleValue = double.Parse(paraNum);
-                        parameter = doubleValue;
-                    }
-                    else if (paramType == typeof(string))
-                    {
-                        parameter = paraNum;
-                    }
+                    Type type = parameters[0].ParameterType;
+                    if (type.IsEnum) parameter = Enum.ToObject(type, int.Parse(paraNum));
+                    else if (type == typeof(bool)) parameter = paraNum == "1";
+                    else parameter = type == typeof(string) ? paraNum : Convert.ChangeType(paraNum, type);
                 }
 
-                //Invoke the method
                 try
                 {
-                    if (methodInfo.GetParameters().Length == 1) methodInfo.Invoke(component, new object[] { parameter });
-                    else methodInfo.Invoke(component, null);
+                    methodInfo.Invoke(obj.GetComponent(methodInfo.DeclaringType), parameters.Length == 0 ? null : new object[] { parameter });
                 }
                 catch (Exception e)
                 {

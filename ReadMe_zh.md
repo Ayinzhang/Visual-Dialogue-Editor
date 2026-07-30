@@ -6,7 +6,7 @@
 
 ### 创建
 
-&emsp;&emsp;右键单击并选择 Create/Dialogue Graph，你将获得一个名为 New Dialogue Graph 的文件。在双击文件进行编辑之前，可以先在检查器中的文件列表中添加名称，以便稍后可以在对话节点中下拉选择名称。
+&emsp;&emsp;右键单击并选择 Create/Dialogue Graph，你将获得一个名为 New Dialogue Graph 的文件。在双击文件进行编辑之前，可以先在检查器中的文件列表中添加语言和名称，以便稍后可以在对话节点中下拉选择语言和名称。
 
 <center class="half">
 <img src="image-20241030163037943.png" height = 200/>
@@ -41,6 +41,7 @@ public DataType Next(int num = -1) // -1: continue dialogue,
 // Useage
 public ScriptableObject graph; // Load your graph file
 DialogueGraph dialogueGraph = (DialogueGraph)Instantiate(graph);
+dialogueGraph.SetLanguage(languageIndex); // Choose the language
 switch (chatGraph.Next(num))
 {
     case DialogueGraph.DataType.Dialogue:

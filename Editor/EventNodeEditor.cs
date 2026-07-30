@@ -1,8 +1,6 @@
 ﻿namespace DialogueEditor
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using UnityEditor;
     using UnityEditorInternal;
@@ -17,20 +15,13 @@
     public class EventNodeEditor : NodeEditor
     {
         bool isCheckInfo; EventNode node; NodePort before, after;
-        List<Component> components = new List<Component>();
 
         class MethodSelectionData
         {
             public int Index { get; }
-            public Component Component { get; }
             public MethodInfo Method { get; }
 
-            public MethodSelectionData(int index, Component component, MethodInfo method)
-            {
-                Index = index;
-                Component = component;
-                Method = method;
-            }
+            public MethodSelectionData(int index, MethodInfo method) { Index = index; Method = method; }
         }
 
         public override void OnCreate()
@@ -41,12 +32,21 @@
 
         public override void OnBodyGUI()
         {
-            if (!isCheckInfo) { isCheckInfo = true; for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo(); }
+            if (!isCheckInfo)
+            {
+                isCheckInfo = true;
+                for (int i = 0; i < node.eventList.Count; i++)
+                {
+                    FuncInfo info = node.eventList[i];
+                    info.obj = SceneObjectReferenceEditor.Find(info.obj, info.objGlobalId, info.objPath);
+                    info.RefreshInfo();
+                }
+            }
             if (node.isMin)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(new GUIContent("Before"), new GUILayoutOption[] { GUILayout.MinWidth(30) });
-                EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, new GUILayoutOption[] { GUILayout.MinWidth(30) });
+                EditorGUILayout.LabelField(new GUIContent("Before"), GUILayout.MinWidth(30));
+                EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
                 EditorGUILayout.EndHorizontal();
                 if (before == null || after == null) GetPorts();
                 Rect rect = GUILayoutUtility.GetLastRect();
@@ -100,12 +100,10 @@
 
             list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                SerializedProperty itemData = arrayData.GetArrayElementAtIndex(index), objInstanceID = itemData.FindPropertyRelative("objInstanceID"),
+                SerializedProperty itemData = arrayData.GetArrayElementAtIndex(index), objGlobalId = itemData.FindPropertyRelative("objGlobalId"),
                 portType = itemData.FindPropertyRelative("portType"), objPath = itemData.FindPropertyRelative("objPath"), compName = itemData.FindPropertyRelative("compName"),
                 funcName = itemData.FindPropertyRelative("funcName"), declType = itemData.FindPropertyRelative("declType"),
                 paraType = itemData.FindPropertyRelative("paraType"), paraNum = itemData.FindPropertyRelative("paraNum");
-
-                MethodInfo methodInfo = node.eventList[index].GetMethodInfo();
 
                 float padding = 5f, fieldHeight = EditorGUIUtility.singleLineHeight;
                 Rect objRect = new Rect(rect.x, rect.y, rect.width / 3 - padding / 2, fieldHeight);
@@ -114,45 +112,35 @@
                 if (EditorGUI.DropdownButton(objRect, new GUIContent($"{node.eventList[index].compName}.{node.eventList[index].funcName}"), FocusType.Keyboard))
                 {
                     if (node.eventList[index].obj == null) return;
-                    else
-                    {
-                        objInstanceID.intValue = node.eventList[index].obj.GetInstanceID();
-
-                        Transform trans = node.eventList[index].obj.transform;
-                        objPath.stringValue = trans.name;
-                        while (trans.parent != null)
-                        {
-                            trans = trans.parent;
-                            objPath.stringValue = trans.name + "/" + objPath.stringValue;
-                        }
-                        objPath.stringValue = node.eventList[index].obj.scene.name + "/" + objPath.stringValue;
-                    }
+                    objGlobalId.stringValue = SceneObjectReferenceEditor.GetId(node.eventList[index].obj);
+                    objPath.stringValue = SceneObjectReferenceEditor.GetPath(node.eventList[index].obj);
 
                     GenericMenu menu = new GenericMenu();
-                    components.Clear(); Component[] comps = node.eventList[index].obj.GetComponents<Component>();
-                    foreach (Component comp in comps) components.Add(comp);
-
-                    foreach (Component component in components)
+                    foreach (Component component in node.eventList[index].obj.GetComponents<Component>())
                     {
                         MethodInfo[] methods = component.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
                         foreach (MethodInfo method in methods)
-                            if (!method.IsSpecialName && method.GetParameters().Length <= 1)
-                                menu.AddItem(new GUIContent($"{component.GetType().Name}/{method.Name}"), false, OnMethodSelected, new MethodSelectionData(index, component, method));
+                        {
+                            ParameterInfo[] parameters = method.GetParameters();
+                            Type type = parameters.Length == 1 ? parameters[0].ParameterType : null;
+                            if (!method.IsSpecialName && parameters.Length <= 1 && (type == null || type.IsEnum || type == typeof(int) ||
+                                type == typeof(float) || type == typeof(double) || type == typeof(bool) || type == typeof(string)))
+                                menu.AddItem(new GUIContent($"{component.GetType().Name}/{method.Name}"), false, OnMethodSelected, new MethodSelectionData(index, method));
+                        }
                     }
 
                     menu.ShowAsContext();
                 }
 
+                objRect = new Rect(rect.x, rect.y + fieldHeight, rect.width / 3 - padding / 2, fieldHeight);
+                portType.enumValueIndex = (int)(PortType)EditorGUI.EnumPopup(objRect, (PortType)portType.enumValueIndex);
                 if (!string.IsNullOrEmpty(paraType.stringValue))
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    objRect = new Rect(rect.x, rect.y + fieldHeight, rect.width / 3 - padding / 2, fieldHeight);
-                    portType.enumValueIndex = (int)(PortType)EditorGUI.EnumPopup(objRect, (PortType)portType.enumValueIndex);
                     Type paramType = Type.GetType(paraType.stringValue);
                     objRect = new Rect(rect.x + rect.width / 3 + padding, rect.y + fieldHeight, 2 * rect.width / 3 - padding / 2, fieldHeight);
 
-                    if (paramType.IsEnum)
+                    if (paramType != null && paramType.IsEnum)
                     {
                         Enum enumValue = (Enum)Enum.ToObject(paramType, int.Parse(paraNum.stringValue));
                         enumValue = EditorGUI.EnumPopup(objRect, enumValue);
@@ -183,20 +171,19 @@
                                 paraNum.stringValue = boolValue ? "1" : "0";
                                 break;
                         }
-                    EditorGUILayout.EndHorizontal();
+                }
 
-                    NodePort port = node.GetPort("inList " + index);
-                    if (port != null && (portType.enumValueIndex & (int)PortType.Input) != 0)
-                    {
-                        Vector2 portPosition = rect.position + new Vector2(-35, EditorGUIUtility.singleLineHeight * 0.6f);
-                        NodeEditorGUILayout.PortField(portPosition, port);
-                    }
-                    port = node.GetPort("eventList " + index);
-                    if (port != null && (portType.enumValueIndex & (int)PortType.Output) != 0)
-                    {
-                        Vector2 portPosition = rect.position + new Vector2(rect.width + 6, EditorGUIUtility.singleLineHeight * 0.6f);
-                        NodeEditorGUILayout.PortField(portPosition, port);
-                    }
+                NodePort port = node.GetPort("inList " + index);
+                if (port != null && (portType.enumValueIndex & (int)PortType.Input) != 0)
+                {
+                    Vector2 portPosition = rect.position + new Vector2(-35, EditorGUIUtility.singleLineHeight * 0.6f);
+                    NodeEditorGUILayout.PortField(portPosition, port);
+                }
+                port = node.GetPort("eventList " + index);
+                if (port != null && (portType.enumValueIndex & (int)PortType.Output) != 0)
+                {
+                    Vector2 portPosition = rect.position + new Vector2(rect.width + 6, EditorGUIUtility.singleLineHeight * 0.6f);
+                    NodeEditorGUILayout.PortField(portPosition, port);
                 }
                 serializedObject.ApplyModifiedProperties();
                 serializedObject.Update();
@@ -210,38 +197,16 @@
             list.onReorderCallback = (ReorderableList list) =>
             {
                 serializedObject.Update();
-                bool hasRect = false, hasNewRect = false;
-                Rect rect = Rect.zero, newRect = Rect.zero;
-
-                // Move up
-                if (list.index > reorderableListIndex)
+                int step = list.index > reorderableListIndex ? 1 : -1;
+                for (int i = reorderableListIndex; i != list.index; i += step)
                 {
-                    for (int i = reorderableListIndex; i < list.index; ++i)
-                    {
-                        NodePort port = node.GetPort("eventList " + i), nextPort = node.GetPort("eventList " + (i + 1)); port.SwapConnections(nextPort);
-                        port = node.GetPort("inList " + i); nextPort = node.GetPort("inList " + (i + 1)); port.SwapConnections(nextPort);
+                    NodePort port = node.GetPort("eventList " + i), nextPort = node.GetPort("eventList " + (i + step)); port.SwapConnections(nextPort);
+                    port = node.GetPort("inList " + i); nextPort = node.GetPort("inList " + (i + step)); port.SwapConnections(nextPort);
 
-                        // Swap cached positions to mitigate twitching
-                        hasRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(port, out rect);
-                        hasNewRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(nextPort, out newRect);
-                        NodeEditorWindow.current.portConnectionPoints[port] = hasNewRect ? newRect : rect;
-                        NodeEditorWindow.current.portConnectionPoints[nextPort] = hasRect ? rect : newRect;
-                    }
-                }
-
-                // Move down
-                else
-                {
-                    for (int i = reorderableListIndex; i > list.index; --i)
-                    {
-                        NodePort port = node.GetPort("eventList " + i), nextPort = node.GetPort("eventList " + (i - 1)); port.SwapConnections(nextPort);
-                        port = node.GetPort("inList " + i); nextPort = node.GetPort("inList " + (i - 1)); port.SwapConnections(nextPort);
-
-                        hasRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(port, out rect);
-                        hasNewRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(nextPort, out newRect);
-                        NodeEditorWindow.current.portConnectionPoints[port] = hasNewRect ? newRect : rect;
-                        NodeEditorWindow.current.portConnectionPoints[nextPort] = hasRect ? rect : newRect;
-                    }
+                    bool hasRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(port, out Rect rect);
+                    bool hasNewRect = NodeEditorWindow.current.portConnectionPoints.TryGetValue(nextPort, out Rect newRect);
+                    NodeEditorWindow.current.portConnectionPoints[port] = hasNewRect ? newRect : rect;
+                    NodeEditorWindow.current.portConnectionPoints[nextPort] = hasRect ? rect : newRect;
                 }
 
                 serializedObject.ApplyModifiedProperties();
@@ -250,7 +215,7 @@
                 arrayData.MoveArrayElement(reorderableListIndex, list.index);
 
                 serializedObject.ApplyModifiedProperties();
-                serializedObject.Update(); for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo();
+                serializedObject.Update();
                 NodeEditorWindow.current.Repaint();
                 EditorApplication.delayCall += NodeEditorWindow.current.Repaint;
             };
@@ -263,49 +228,40 @@
                 serializedObject.Update();
                 EditorUtility.SetDirty(node);
                 arrayData.InsertArrayElementAtIndex(arrayData.arraySize);
-                serializedObject.ApplyModifiedProperties(); for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo(); ;
+                serializedObject.ApplyModifiedProperties();
             };
 
             list.onRemoveCallback = (ReorderableList list) =>
             {
-                var indexedPorts = node.DynamicPorts.Select(x =>
-                {
-                    string[] split = x.fieldName.Split(' ');
-                    if (split != null && split.Length == 2 && (split[0] == "inList" || split[0] == "eventList"))
-                    {
-                        int i = -1;
-                        if (int.TryParse(split[1], out i))
-                        {
-                            return new { index = i, port = x };
-                        }
-                    }
-                    return new { index = -1, port = (NodePort)null };
-                }).Where(x => x.port != null);
-                var dynamicPorts = indexedPorts.OrderBy(x => x.index).Select(x => x.port).ToList();
-
                 int index = list.index;
-
-                dynamicPorts[2 * index].ClearConnections();
-                dynamicPorts[2 * index + 1].ClearConnections();
-                for (int k = 2 * index + 2; k < dynamicPorts.Count(); k++)
+                NodePort[] ports = new NodePort[node.eventList.Count * 2];
+                for (int i = 0; i < node.eventList.Count; i++)
                 {
-                    for (int j = 0; j < dynamicPorts[k].ConnectionCount; j++)
+                    ports[2 * i] = node.GetPort("inList " + i);
+                    ports[2 * i + 1] = node.GetPort("eventList " + i);
+                }
+
+                ports[2 * index].ClearConnections();
+                ports[2 * index + 1].ClearConnections();
+                for (int i = 2 * index + 2; i < ports.Length; i++)
+                {
+                    while (ports[i].ConnectionCount > 0)
                     {
-                        NodePort other = dynamicPorts[k].GetConnection(j);
-                        dynamicPorts[k].Disconnect(other);
-                        dynamicPorts[k - 2].Connect(other);
+                        NodePort other = ports[i].GetConnection(0);
+                        ports[i].Disconnect(other);
+                        ports[i - 2].Connect(other);
                     }
                 }
-                node.RemoveDynamicPort(dynamicPorts[dynamicPorts.Count() - 1].fieldName);
-                node.RemoveDynamicPort(dynamicPorts[dynamicPorts.Count() - 2].fieldName);
-                serializedObject.Update(); for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo(); ;
+                node.RemoveDynamicPort(ports[ports.Length - 1].fieldName);
+                node.RemoveDynamicPort(ports[ports.Length - 2].fieldName);
+                serializedObject.Update();
                 EditorUtility.SetDirty(node);
 
                 if (arrayData.propertyType != SerializedPropertyType.String)
                 {
                     arrayData.DeleteArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    serializedObject.Update(); for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo(); ;
+                    serializedObject.Update();
                 }
             };
         }
@@ -314,8 +270,8 @@
         {
             foreach (NodePort port in target.Ports)
             {
-                if (port.fieldName.Equals("before")) before = port;
-                else if (port.fieldName.Equals("after")) after = port;
+                if (port.fieldName == "before") before = port;
+                else if (port.fieldName == "after") after = port;
             }
         }
 
@@ -323,7 +279,6 @@
         {
             MethodSelectionData data = (MethodSelectionData)userData;
             int index = data.Index;
-            Component component = data.Component;
             MethodInfo method = data.Method;
 
             SerializedProperty arrayData = serializedObject.FindProperty("eventList"),
@@ -331,20 +286,16 @@
                 funcName = itemData.FindPropertyRelative("funcName"), declType = itemData.FindPropertyRelative("declType"),
                 paraType = itemData.FindPropertyRelative("paraType"), paraNum = itemData.FindPropertyRelative("paraNum");
 
-            compName.stringValue = component.GetType().Name;
+            compName.stringValue = method.DeclaringType.Name;
             funcName.stringValue = method.Name;
             declType.stringValue = method.DeclaringType.AssemblyQualifiedName;
 
-            if (Type.GetTypeCode(Type.GetType(declType.stringValue)) == TypeCode.String) paraNum.stringValue = "";
-            else paraNum.stringValue = "0";
-
-            //If method has one parameter, save the type of the parameter
             ParameterInfo[] parameters = method.GetParameters();
-            if (parameters.Length == 1) paraType.stringValue = parameters[0].ParameterType.AssemblyQualifiedName;
-            else paraType.stringValue = null;
+            paraType.stringValue = parameters.Length == 1 ? parameters[0].ParameterType.AssemblyQualifiedName : null;
+            paraNum.stringValue = parameters.Length == 1 && parameters[0].ParameterType == typeof(string) ? "" : "0";
 
             serializedObject.ApplyModifiedProperties();
-            serializedObject.Update(); for (int i = 0; i < node.eventList.Count; i++) node.eventList[i].RefreshInfo();
+            serializedObject.Update();
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace DialogueEditor
 {
     using System;
-    using System.Collections.Generic;
     using System.Reflection;
     using UnityEditor;
     using UnityEditorInternal;
@@ -14,20 +13,13 @@ namespace DialogueEditor
     public class CheckNodeEditor : NodeEditor
     {
         bool isCheckInfo; CheckNode node; NodePort before, after;
-        List<Component> components = new List<Component>();
 
         class VariableData
         {
-            public int Index { get; }
             public Component Component { get; }
             public FieldInfo Field { get; }
 
-            public VariableData(int index, Component component, FieldInfo field)
-            {
-                Index = index;
-                Component = component;
-                Field = field;
-            }
+            public VariableData(Component component, FieldInfo field) { Component = component; Field = field; }
         }
 
         public override void OnCreate()
@@ -38,10 +30,15 @@ namespace DialogueEditor
 
         public override void OnBodyGUI()
         {
-            if (!isCheckInfo) { isCheckInfo = true; node.RefreshInfo(); }
+            if (!isCheckInfo)
+            {
+                isCheckInfo = true;
+                node.obj = SceneObjectReferenceEditor.Find(node.obj, node.objGlobalId, node.objPath);
+                node.RefreshInfo();
+            }
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Before"), new GUILayoutOption[] { GUILayout.MinWidth(30) });
-            if (node.isMin) EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, new GUILayoutOption[] { GUILayout.MinWidth(30) });
+            EditorGUILayout.LabelField(new GUIContent("Before"), GUILayout.MinWidth(30));
+            if (node.isMin) EditorGUILayout.LabelField(new GUIContent("After"), NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
             EditorGUILayout.EndHorizontal();
             if (before == null || after == null) GetPorts();
             Rect rect = GUILayoutUtility.GetLastRect();
@@ -67,15 +64,17 @@ namespace DialogueEditor
                 if (EditorGUILayout.DropdownButton(new GUIContent($"{node.compName}.{node.varName}"), FocusType.Keyboard))
                 {
                     if (node.obj == null) return;
-                    GenericMenu menu = new GenericMenu(); components.Clear();
-                    Component[] comps = node.obj.GetComponents<Component>();
-                    foreach (Component comp in comps) components.Add(comp);
-
-                    foreach (Component component in components)
+                    GenericMenu menu = new GenericMenu();
+                    foreach (Component component in node.obj.GetComponents<Component>())
                     {
                         FieldInfo[] fields = component.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
                         foreach (FieldInfo field in fields)
-                            menu.AddItem(new GUIContent($"{component.GetType().Name}/{field.Name}"), false, OnVariableSelected, new VariableData(-1, component, field));
+                        {
+                            TypeCode type = Type.GetTypeCode(field.FieldType);
+                            if (field.FieldType.IsEnum || type == TypeCode.Int32 || type == TypeCode.Boolean || type == TypeCode.Single ||
+                                type == TypeCode.Double || type == TypeCode.String)
+                                menu.AddItem(new GUIContent($"{component.GetType().Name}/{field.Name}"), false, OnVariableSelected, new VariableData(component, field));
+                        }
                     }
                     menu.ShowAsContext();
                 }
@@ -124,6 +123,7 @@ namespace DialogueEditor
                 if (!string.IsNullOrEmpty(node.varType))
                 {
                     Type varType = Type.GetType(node.varType);
+                    if (varType == null) return;
                     if (varType.IsEnum)
                     {
                         Enum enumValue = (Enum)Enum.ToObject(varType, int.Parse(checkNum.stringValue));
@@ -146,7 +146,7 @@ namespace DialogueEditor
                                 break;
 
                             case TypeCode.Boolean:
-                                bool boolValue = int.Parse(node.checkList[index].checkNum) == 1;
+                                bool boolValue = checkNum.stringValue == "1";
                                 boolValue = EditorGUI.Toggle(checkNumRect, boolValue);
                                 checkNum.stringValue = boolValue ? "1" : "0";
                                 break;
@@ -170,8 +170,7 @@ namespace DialogueEditor
                 arrayData.InsertArrayElementAtIndex(arrayData.arraySize);
                 SerializedProperty varType = serializedObject.FindProperty("varType"),
                 checkNum = arrayData.GetArrayElementAtIndex(arrayData.arraySize - 1).FindPropertyRelative("checkNum");
-                if (Type.GetTypeCode(Type.GetType(varType.stringValue)) == TypeCode.String) checkNum.stringValue = "";
-                else checkNum.stringValue = "0";
+                checkNum.stringValue = Type.GetType(varType.stringValue) == typeof(string) ? "" : "0";
                 serializedObject.ApplyModifiedProperties(); node.RefreshInfo();
             };
         }
@@ -180,8 +179,8 @@ namespace DialogueEditor
         {
             foreach (NodePort port in target.Ports)
             {
-                if (port.fieldName.Equals("before")) before = port;
-                else if (port.fieldName.Equals("after")) after = port;
+                if (port.fieldName == "before") before = port;
+                else if (port.fieldName == "after") after = port;
             }
         }
 
@@ -189,19 +188,12 @@ namespace DialogueEditor
         {
             VariableData data = (VariableData)userData;
             Component component = data.Component; FieldInfo field = data.Field;
-            SerializedProperty objInstanceID = serializedObject.FindProperty("objInstanceID"), objPath = serializedObject.FindProperty("objPath"),
+            SerializedProperty objGlobalId = serializedObject.FindProperty("objGlobalId"), objPath = serializedObject.FindProperty("objPath"),
                 compName = serializedObject.FindProperty("compName"), varName = serializedObject.FindProperty("varName"),
                 varType = serializedObject.FindProperty("varType"), arrayData = serializedObject.FindProperty("checkList");
 
-            objInstanceID.intValue = node.obj.GetInstanceID();
-            Transform trans = node.obj.transform;
-            objPath.stringValue = trans.name;
-            while (trans.parent != null)
-            {
-                trans = trans.parent;
-                objPath.stringValue = trans.name + "/" + objPath.stringValue;
-            }
-            objPath.stringValue = node.obj.scene.name + "/" + objPath.stringValue;
+            objGlobalId.stringValue = SceneObjectReferenceEditor.GetId(node.obj);
+            objPath.stringValue = SceneObjectReferenceEditor.GetPath(node.obj);
 
             compName.stringValue = component.GetType().Name;
             varName.stringValue = field.Name;
@@ -211,8 +203,7 @@ namespace DialogueEditor
                 for (int i = 0; i < node.checkList.Count; i++)
                 {
                     SerializedProperty checkNum = arrayData.GetArrayElementAtIndex(i).FindPropertyRelative("checkNum");
-                    if (Type.GetTypeCode(Type.GetType(varType.stringValue)) == TypeCode.String) checkNum.stringValue = "";
-                    else checkNum.stringValue = "0";
+                    checkNum.stringValue = field.FieldType == typeof(string) ? "" : "0";
                 }
             }
 
@@ -220,4 +211,5 @@ namespace DialogueEditor
             serializedObject.Update(); node.RefreshInfo();
         }
     }
+
 }

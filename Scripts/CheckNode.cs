@@ -21,53 +21,30 @@
         [HideInInspector] public bool isMin;
         [HideInInspector] public string abstruct;
         public GameObject obj;
-        [HideInInspector] public int objInstanceID;
-        [HideInInspector] public string objPath, compName, varName, varType;
+        [HideInInspector] public string objGlobalId, objPath, compName, varName, varType;
         [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
         [Output(dynamicPortList = true, connectionType = ConnectionType.Multiple)]
         public List<CheckInfo> checkList = new List<CheckInfo>();
 
         public void RefreshInfo()
         {
-            if (obj == null && objPath != null)
-            {
-                string[] names = objPath.Split('/');
-
-                Transform trans = null;
-                for (int i = 1; i < names.Length; i++)
-                {
-                    trans = i == 1 ? GameObject.Find(names[i])?.transform : trans.Find(names[i]);
-                    if (trans == null) break;
-                }
-                if (trans != null) obj = trans.gameObject;
-            }
-
-            if (obj != null)
-            {
-                Component component = obj.GetComponent(compName);
-                if (component != null)
-                {
-                    FieldInfo field = component.GetType().GetField(varName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                    if (field == null || field.FieldType.AssemblyQualifiedName != varType)
-                        compName = varName = varType = null;
-                }
-                else compName = varName = varType = null;
-            }
-            else { obj = null; compName = varName = varType = null; }
+            obj = SceneObjectReference.Find(obj, objPath);
+            if (obj == null || string.IsNullOrEmpty(compName)) return;
+            Component component = obj.GetComponent(compName);
+            FieldInfo field = component?.GetType().GetField(varName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+            if (field == null || field.FieldType.AssemblyQualifiedName != varType) compName = varName = varType = null;
         }
 
         public string GetNextStr()
         {
             RefreshInfo();
 
-            //Check Object and Component Name
             if (obj == null || string.IsNullOrEmpty(compName) || string.IsNullOrEmpty(varName))
             {
                 Debug.LogWarning("GameObject or component or variable is not set");
                 return null;
             }
 
-            //Find the component
             Component component = obj.GetComponent(compName);
             if (component == null)
             {
@@ -75,7 +52,6 @@
                 return null;
             }
 
-            //Get the field
             FieldInfo field = component.GetType().GetField(varName, BindingFlags.Public | BindingFlags.Instance);
             if (field == null)
             {
@@ -83,15 +59,12 @@
                 return null;
             }
 
-            //Get the value of the field
-            string varNum = field.GetValue(component).ToString();
-            Type paramType = Type.GetType(varType);
-
-            switch (Type.GetTypeCode(paramType))
+            object value = field.GetValue(component);
+            switch (Type.GetTypeCode(field.FieldType))
             {
                 case TypeCode.Int32:
                 case TypeCode.Boolean:
-                    int intValue = int.Parse(varNum);
+                    int intValue = field.FieldType == typeof(bool) && (bool)value ? 1 : Convert.ToInt32(value);
                     for (int i = 0; i < checkList.Count; i++)
                     {
                         if ((checkList[i].checkType == CheckType.Equal && intValue == int.Parse(checkList[i].checkNum)) ||
@@ -103,7 +76,7 @@
                     break;
                 case TypeCode.Single:
                 case TypeCode.Double:
-                    double doubleValue = double.Parse(varNum);
+                    double doubleValue = Convert.ToDouble(value);
                     for (int i = 0; i < checkList.Count; i++)
                         if ((checkList[i].checkType == CheckType.Equal && doubleValue == double.Parse(checkList[i].checkNum)) ||
                            (checkList[i].checkType == CheckType.NotEqual && doubleValue != double.Parse(checkList[i].checkNum)) ||
@@ -113,12 +86,14 @@
                     break;
 
                 case TypeCode.String:
+                    string text = value as string;
                     for (int i = 0; i < checkList.Count; i++)
                     {
-                        int cmp = string.Compare(varNum, checkList[i].checkNum);
-                        if ((cmp == 1 && (checkList[i].checkType == CheckType.NotEqual || checkList[i].checkType == CheckType.Less)) ||
-                           (cmp == 0 && checkList[i].checkType == CheckType.Equal) ||
-                           (cmp == -1 && (checkList[i].checkType == CheckType.NotEqual || checkList[i].checkType == CheckType.Greater)))
+                        int cmp = string.Compare(text, checkList[i].checkNum);
+                        if ((checkList[i].checkType == CheckType.Equal && cmp == 0) ||
+                           (checkList[i].checkType == CheckType.NotEqual && cmp != 0) ||
+                           (checkList[i].checkType == CheckType.Greater && cmp > 0) ||
+                           (checkList[i].checkType == CheckType.Less && cmp < 0))
                             return "checkList " + i;
                     }
                     break;
@@ -126,4 +101,5 @@
             return null;
         }
     }
+
 }

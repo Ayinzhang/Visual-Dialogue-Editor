@@ -1,55 +1,73 @@
 using UnityEngine;
 using UnityEngine.UI;
-using DialogueEditor;
 
-public class DialogueSystem : MonoBehaviour
+namespace DialogueEditor
 {
-    public GameObject cha, bg;
-    public GameObject[] options;
-    public ScriptableObject graph;
-    [HideInInspector] public int cnt;
-
-    Image chaImg;
-    Text bgText;
-    Text[] optionTests;
-    DialogueGraph dialogueGraph;
-
-    bool option;
-
-    void Start()
+    public class DialogueSystem : MonoBehaviour
     {
-        chaImg = cha.GetComponent<Image>();
-        bgText = bg.GetComponentInChildren<Text>();
-        optionTests = new Text[options.Length];
-        for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>();
-        cha.SetActive(true); bg.SetActive(true); dialogueGraph = (DialogueGraph)Instantiate(graph); Next();
-    }
+        public GameObject cha, bg;
+        public GameObject[] options;
+        public DialogueGraph graph;
+        [SerializeField, HideInInspector] int languageIndex;
+        [HideInInspector] public int cnt;
 
-    public void Next(int num = -1) 
-    {
-        if (option && num == -1) return;
-        else if (option)
+        Image chaImg;
+        Text bgText;
+        Text[] optionTests;
+        DialogueGraph dialogueGraph;
+
+        bool option;
+
+        void Start()
         {
-            option = false; cnt += 1 - num;
-            for (int i = 0; i < options.Length; i++)
-                options[i].SetActive(false);
+            chaImg = cha.GetComponent<Image>();
+            bgText = bg.GetComponentInChildren<Text>();
+            optionTests = new Text[options.Length];
+            for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>();
+            cha.SetActive(true); bg.SetActive(true);
+            if (graph == null)
+            {
+                Debug.LogError("Dialogue graph is not assigned.", this);
+                enabled = false;
+                return;
+            }
+
+            dialogueGraph = Instantiate(graph);
+            dialogueGraph.SetLanguage(languageIndex);
+            Next();
         }
 
-        switch (dialogueGraph.Next(num))
+        public void Next(int num = -1)
         {
-            case DialogueGraph.DataType.Dialogue:
-                chaImg.sprite = dialogueGraph.dialogueInfo.sprite;
-                bgText.text = dialogueGraph.dialogueInfo.name + ":\n" + dialogueGraph.dialogueInfo.context;
-                break;
-            case DialogueGraph.DataType.Option:
-                option = true;
-                for (int i = 0; i < options.Length; i++) options[i].SetActive(true);
-                for (int i = 0; i < dialogueGraph.optionInfo.Count; i++) optionTests[i].text = dialogueGraph.optionInfo[i];
-                break;
-            case DialogueGraph.DataType.End:
-                cha.SetActive(false); bg.SetActive(false);
-                for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
-                break;
+            if (option && num == -1) return;
+            else if (option)
+            {
+                option = false; cnt += 1 - num;
+                for (int i = 0; i < options.Length; i++)
+                    options[i].SetActive(false);
+            }
+
+            switch (dialogueGraph.Next(num))
+            {
+                case DialogueGraph.DataType.Dialogue:
+                    chaImg.sprite = dialogueGraph.dialogueInfo.sprite;
+                    bgText.text = dialogueGraph.dialogueInfo.name + ":\n" + dialogueGraph.dialogueInfo.context;
+                    break;
+                case DialogueGraph.DataType.Option:
+                    option = true;
+                    for (int i = 0; i < options.Length; i++) options[i].SetActive(true);
+                    for (int i = 0; i < dialogueGraph.optionInfo.Count; i++) optionTests[i].text = dialogueGraph.optionInfo[i];
+                    break;
+                case DialogueGraph.DataType.End:
+                    cha.SetActive(false); bg.SetActive(false);
+                    for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
+                    break;
+            }
+        }
+
+        public void Print(int num)
+        {
+            Debug.Log(num, this);
         }
     }
 }
