@@ -7,33 +7,31 @@ namespace DialogueEditor
     {
         public GameObject cha, bg;
         public GameObject[] options;
-        public DialogueGraph graph;
-        [SerializeField, HideInInspector] int languageIndex;
-        [HideInInspector] public int cnt;
+        public DialogueGraph[] graphs;
+        [System.NonSerialized] public DialogueGraph graph;
+        [HideInInspector] public int cnt; // cnt is for the Demo check node
 
         Image chaImg;
         Text bgText;
         Text[] optionTests;
-        DialogueGraph dialogueGraph;
-
+        [SerializeField] int languageIndex;
         bool option;
 
         void Start()
         {
             chaImg = cha.GetComponent<Image>();
-            bgText = bg.GetComponentInChildren<Text>();
+            bgText = bg.GetComponentInChildren<Text>(true);
             optionTests = new Text[options.Length];
-            for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>();
-            cha.SetActive(true); bg.SetActive(true);
-            if (graph == null)
-            {
-                Debug.LogError("Dialogue graph is not assigned.", this);
-                enabled = false;
-                return;
-            }
+            for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>(true);
+            Init();
+        }
 
-            dialogueGraph = Instantiate(graph);
-            dialogueGraph.SetLanguage(languageIndex);
+        public void Init(int graphIndex = 0)
+        {
+            if (graph != null) { graph.Stop(); Destroy(graph); }
+            graph = Instantiate(graphs[graphIndex]);
+            graph.languageIndex = languageIndex;
+            cha.SetActive(true); bg.SetActive(true);
             Next();
         }
 
@@ -42,21 +40,22 @@ namespace DialogueEditor
             if (option && num == -1) return;
             else if (option)
             {
-                option = false; cnt += 1 - num;
-                for (int i = 0; i < options.Length; i++)
-                    options[i].SetActive(false);
+                option = false;
+                for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
             }
-
-            switch (dialogueGraph.Next(num))
+            DialogueGraph current = graph;
+            DialogueGraph.DataType state = current.Next(num);
+            if (current != graph) return;
+            switch (state)
             {
                 case DialogueGraph.DataType.Dialogue:
-                    chaImg.sprite = dialogueGraph.dialogueInfo.sprite;
-                    bgText.text = dialogueGraph.dialogueInfo.name + ":\n" + dialogueGraph.dialogueInfo.context;
+                    chaImg.sprite = graph.dialogueInfo.sprite;
+                    bgText.text = graph.dialogueInfo.name + ":\n" + graph.dialogueInfo.context;
                     break;
                 case DialogueGraph.DataType.Option:
                     option = true;
-                    for (int i = 0; i < options.Length; i++) options[i].SetActive(true);
-                    for (int i = 0; i < dialogueGraph.optionInfo.Count; i++) optionTests[i].text = dialogueGraph.optionInfo[i];
+                    for (int i = 0; i < options.Length; i++) options[i].SetActive(i < graph.optionInfo.Count);
+                    for (int i = 0; i < graph.optionInfo.Count; i++) optionTests[i].text = graph.optionInfo[i];
                     break;
                 case DialogueGraph.DataType.End:
                     cha.SetActive(false); bg.SetActive(false);
@@ -65,9 +64,14 @@ namespace DialogueEditor
             }
         }
 
-        public void Print(int num)
+        void OnDestroy()
         {
-            Debug.Log(num, this);
+            Destroy(graph);
+        }
+
+        public void DemoPrint(int num)
+        {
+            Debug.Log(cnt += num, this);
         }
     }
 }

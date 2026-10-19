@@ -1,0 +1,5 @@
+{
+    "name": "DialogueEditor.Editor",
+    "references": ["DialogueEditor.Runtime", "DialogueEditor.Demo", "XNode", "XNodeEditor"],
+    "includePlatforms": ["Editor"]
+}

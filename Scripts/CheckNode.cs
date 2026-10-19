@@ -1,4 +1,4 @@
-﻿namespace DialogueEditor
+namespace DialogueEditor
 {
     using System;
     using System.Collections.Generic;
@@ -6,14 +6,13 @@
     using UnityEngine;
     using XNode;
 
-    [Serializable]
-    [NodeWidth(350)]
+    [Serializable, NodeWidth(350)]
     public class CheckNode : Node
     {
         public enum CheckType { Equal, NotEqual, Greater, Less }
-        [Serializable]
-        public class CheckInfo
+        [Serializable] public class CheckInfo
         {
+            [HideInInspector] public string id;
             public CheckType checkType;
             public string checkNum;
         }
@@ -22,84 +21,25 @@
         [HideInInspector] public string abstruct;
         public GameObject obj;
         [HideInInspector] public string objGlobalId, objPath, compName, varName, varType;
-        [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
-        [Output(dynamicPortList = true, connectionType = ConnectionType.Multiple)]
+        [Output(dynamicPortList = true, connectionType = ConnectionType.Override)]
         public List<CheckInfo> checkList = new List<CheckInfo>();
-
-        public void RefreshInfo()
-        {
-            obj = SceneObjectReference.Find(obj, objPath);
-            if (obj == null || string.IsNullOrEmpty(compName)) return;
-            Component component = obj.GetComponent(compName);
-            FieldInfo field = component?.GetType().GetField(varName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-            if (field == null || field.FieldType.AssemblyQualifiedName != varType) compName = varName = varType = null;
-        }
+        [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
 
         public string GetNextStr()
         {
-            RefreshInfo();
-
-            if (obj == null || string.IsNullOrEmpty(compName) || string.IsNullOrEmpty(varName))
-            {
-                Debug.LogWarning("GameObject or component or variable is not set");
-                return null;
-            }
-
-            Component component = obj.GetComponent(compName);
-            if (component == null)
-            {
-                Debug.LogWarning($"Component not found: {compName}");
-                return null;
-            }
-
-            FieldInfo field = component.GetType().GetField(varName, BindingFlags.Public | BindingFlags.Instance);
-            if (field == null)
-            {
-                Debug.LogWarning($"Field not found: {varName} on component: {compName}");
-                return null;
-            }
-
+            if (!DialogueValidation.TryCheck(this, out Component component, out FieldInfo field, out object[] comparisons, out string error))
+                throw new InvalidOperationException(error);
             object value = field.GetValue(component);
-            switch (Type.GetTypeCode(field.FieldType))
+            for (int i = 0; i < checkList.Count; i++)
             {
-                case TypeCode.Int32:
-                case TypeCode.Boolean:
-                    int intValue = field.FieldType == typeof(bool) && (bool)value ? 1 : Convert.ToInt32(value);
-                    for (int i = 0; i < checkList.Count; i++)
-                    {
-                        if ((checkList[i].checkType == CheckType.Equal && intValue == int.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.NotEqual && intValue != int.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.Greater && intValue > int.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.Less && intValue < int.Parse(checkList[i].checkNum)))
-                            return "checkList " + i;
-                    }
-                    break;
-                case TypeCode.Single:
-                case TypeCode.Double:
-                    double doubleValue = Convert.ToDouble(value);
-                    for (int i = 0; i < checkList.Count; i++)
-                        if ((checkList[i].checkType == CheckType.Equal && doubleValue == double.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.NotEqual && doubleValue != double.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.Greater && doubleValue > double.Parse(checkList[i].checkNum)) ||
-                           (checkList[i].checkType == CheckType.Less && doubleValue < double.Parse(checkList[i].checkNum)))
-                            return "checkList " + i;
-                    break;
-
-                case TypeCode.String:
-                    string text = value as string;
-                    for (int i = 0; i < checkList.Count; i++)
-                    {
-                        int cmp = string.Compare(text, checkList[i].checkNum);
-                        if ((checkList[i].checkType == CheckType.Equal && cmp == 0) ||
-                           (checkList[i].checkType == CheckType.NotEqual && cmp != 0) ||
-                           (checkList[i].checkType == CheckType.Greater && cmp > 0) ||
-                           (checkList[i].checkType == CheckType.Less && cmp < 0))
-                            return "checkList " + i;
-                    }
-                    break;
+                int compare = value is string text ? string.Compare(text, (string)comparisons[i], StringComparison.Ordinal) :
+                    value == null ? (comparisons[i] == null ? 0 : -1) : ((IComparable)value).CompareTo(comparisons[i]);
+                CheckType condition = checkList[i].checkType;
+                if (condition == CheckType.Equal && compare == 0 || condition == CheckType.NotEqual && compare != 0 ||
+                    condition == CheckType.Greater && compare > 0 || condition == CheckType.Less && compare < 0)
+                    return "checkList " + i;
             }
             return null;
         }
     }
-
 }

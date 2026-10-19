@@ -47,7 +47,10 @@ namespace XNodeEditor {
                 NodeEditorWindow w = NodeEditorWindow.Open(graphProp.objectReferenceValue as XNode.NodeGraph);
                 w.Home(); // Focus selected node
             }
-            base.OnInspectorGUI();
+            using (new EditorGUI.DisabledScope(System.Array.Exists(targets, item => {
+                var node = item as XNode.Node;
+                return node != null && node.graph != null && NodeGraphEditor.GetEditor(node.graph, NodeEditorWindow.current).IsReadOnly;
+            }))) base.OnInspectorGUI();
         }
     }
 #else
@@ -66,7 +69,10 @@ namespace XNodeEditor {
             GUILayout.Label("Raw data", "BoldLabel");
 
             // Now draw the node itself.
-            DrawDefaultInspector();
+            using (new EditorGUI.DisabledScope(System.Array.Exists(targets, item => {
+                var node = item as XNode.Node;
+                return node != null && node.graph != null && NodeGraphEditor.GetEditor(node.graph, NodeEditorWindow.current).IsReadOnly;
+            }))) DrawDefaultInspector();
 
             serializedObject.ApplyModifiedProperties();
         }

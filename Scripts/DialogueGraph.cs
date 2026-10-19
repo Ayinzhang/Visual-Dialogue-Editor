@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using UnityEngine.Serialization;
     using XNode;
 
     [Serializable, CreateAssetMenu(fileName = "New Dialogue Graph", menuName = "Dialogue Graph")]
@@ -16,15 +15,156 @@
         [SerializeField, HideInInspector] List<string> languages = new List<string>();
         [SerializeField, HideInInspector] List<LocalizedText> localizedSpeakers = new List<LocalizedText>();
         [SerializeField, HideInInspector] int editorLanguageIndex;
-        [NonSerialized] int runtimeLanguageIndex;
+        [SerializeField, HideInInspector] Node entryNode;
+        [SerializeField, HideInInspector] List<NodeIdentity> nodeIdentities = new List<NodeIdentity>();
+        [SerializeField, HideInInspector] List<string> speakerIds = new List<string>();
+        [Serializable] class NodeIdentity { public Node node; public string id; }
 
-        //Information available for reading
         [HideInInspector] public DataType dataType;
         [HideInInspector] public DialogueInfo dialogueInfo;
         [HideInInspector] public List<string> optionInfo;
+        [HideInInspector] public Node node;
+        [HideInInspector] public int index, languageIndex;
+        bool init;
 
-        Node node; int index; bool init;
+        public Node EntryNode => entryNode;
 
+        public DataType Next(int num = -1)
+        {
+            if (0 <= num) index = num;
+            if (!init) Init();
+            else if (dataType != DataType.End) MoveOn();
+            if (node is EventNode || node is CheckNode) MoveOn();
+            GetInfo(); return dataType;
+        }
+
+        public void Stop()
+        {
+            node = null; dataType = DataType.End; init = true;
+        }
+
+        void Init()
+        {
+            node = entryNode; index = 0; init = true;
+        }
+
+        void GetInfo()
+        {
+            if (node is DialogueNode dialogueNode)
+            {
+                DialogueNode.DialogueInfo line = dialogueNode.dialogueList[index];
+                dialogueInfo.sprite = line.sprite;
+                dialogueInfo.name = line.person < 0 ? string.Empty : GetSpeaker(line.person, languageIndex);
+                dialogueInfo.context = line.GetContext(languageIndex);
+                dataType = DataType.Dialogue;
+            }
+            else if (node is OptionNode optionNode)
+            {
+                optionInfo = optionNode.GetOptions(languageIndex);
+                dataType = DataType.Option;
+            }
+            else dataType = DataType.End;
+        }
+
+        void MoveOn()
+        {
+            do
+            {
+                switch (node)
+                {
+                    case DialogueNode dialogueNode:
+                        if (DialogueValidation.HasOutput(node, index)) GetNodeAndIndex("dialogueList " + index);
+                        else if (++index >= dialogueNode.dialogueList.Count) node = null;
+                        break;
+                    case OptionNode:
+                        GetNodeAndIndex("optionList " + index);
+                        break;
+                    case EventNode eventNode:
+                        eventNode.eventList[index].InvokeMethod();
+                        if (node == null) return; // An event may have switched graphs and stopped this instance.
+                        if (DialogueValidation.HasOutput(node, index)) GetNodeAndIndex("eventList " + index);
+                        else if (++index >= eventNode.eventList.Count) node = null;
+                        break;
+                    case CheckNode checkNode:
+                        GetNodeAndIndex(checkNode.GetNextStr());
+                        break;
+                }
+            } while (node is EventNode || node is CheckNode);
+        }
+
+        void GetNodeAndIndex(string name)
+        {
+            if (name == null) { node = null; return; }
+            NodePort input = node.GetOutputPort(name).Connection;
+            node = input?.node;
+            index = input == null || input.fieldName == "before" ? 0 : int.Parse(input.fieldName.Substring(7));
+        }
+
+        public override Node AddNode(Type type)
+        {
+            bool first = nodes.Count == 0;
+            Node added = base.AddNode(type);
+            nodeIdentities.Add(new NodeIdentity { node = added, id = Guid.NewGuid().ToString("N") });
+            if (first) entryNode = added;
+            return added;
+        }
+
+        public override Node CopyNode(Node original)
+        {
+            Node copy = base.CopyNode(original);
+            nodeIdentities.Add(new NodeIdentity { node = copy, id = Guid.NewGuid().ToString("N") });
+            return copy;
+        }
+
+        public override void RemoveNode(Node removed)
+        {
+            if (entryNode == removed) entryNode = null;
+            nodeIdentities.RemoveAll(item => item.node == removed);
+            base.RemoveNode(removed);
+        }
+
+        public void SetEntry(Node value)
+        {
+            if (value != null && !nodes.Contains(value)) throw new ArgumentException("Entry must belong to this graph.");
+            entryNode = value;
+        }
+
+        public void EnsureIdentifiers()
+        {
+            nodeIdentities.RemoveAll(item => item.node == null || !nodes.Contains(item.node));
+            foreach (Node item in nodes)
+                if (item != null && !nodeIdentities.Exists(identity => identity.node == item))
+                    nodeIdentities.Add(new NodeIdentity { node = item, id = Guid.NewGuid().ToString("N") });
+            while (speakerIds.Count < speakers.Count) speakerIds.Add(Guid.NewGuid().ToString("N"));
+            while (speakerIds.Count > speakers.Count) speakerIds.RemoveAt(speakerIds.Count - 1);
+            foreach (Node item in nodes)
+            {
+                if (item is EventNode events)
+                    foreach (EventNode.FuncInfo info in events.eventList)
+                        if (info != null && string.IsNullOrEmpty(info.id)) info.id = Guid.NewGuid().ToString("N");
+                if (item is CheckNode check)
+                    foreach (CheckNode.CheckInfo info in check.checkList)
+                        if (info != null && string.IsNullOrEmpty(info.id)) info.id = Guid.NewGuid().ToString("N");
+            }
+        }
+
+        public string GetNodeId(Node value) => nodeIdentities.Find(item => item.node == value)?.id;
+        public void SetNodeId(Node value, string id)
+        {
+            NodeIdentity identity = nodeIdentities.Find(item => item.node == value);
+            if (identity == null) throw new ArgumentException("Node is not registered.");
+            identity.id = id;
+        }
+        public string GetSpeakerId(int value) => speakerIds[value];
+        public void SetSpeakerId(int value, string id) { speakerIds[value] = id; }
+        public string GetRawSpeaker(int speaker, int language)
+        { return language == 0 ? speakers[speaker] : localizedSpeakers[speaker].GetRaw(language); }
+        public string GetSpeaker(int speaker, int language)
+        {
+            string fallback = speakers[speaker] ?? string.Empty;
+            return language <= 0 || localizedSpeakers == null || speaker >= localizedSpeakers.Count || localizedSpeakers[speaker] == null ?
+                fallback : localizedSpeakers[speaker].Get(language, fallback);
+        }
         public IReadOnlyList<string> Languages { get { InitLanguages(); return languages; } }
         public int LanguageIndex { get { InitLanguages(); return editorLanguageIndex; } }
         public string CurrentLanguage { get { InitLanguages(); return languages[editorLanguageIndex]; } }
@@ -38,6 +178,7 @@
                 if (graphNode is DialogueNode dialogueNode) dialogueNode.EnsureLocalizationData(languages.Count);
                 else if (graphNode is OptionNode optionNode) optionNode.EnsureLocalizationData(languages.Count);
             }
+            EnsureIdentifiers();
         }
 
         void InitLanguages()
@@ -45,7 +186,6 @@
             if (languages == null) languages = new List<string>();
             if (languages.Count == 0) languages.Add("Default");
             editorLanguageIndex = Mathf.Clamp(editorLanguageIndex, 0, languages.Count - 1);
-            runtimeLanguageIndex = Mathf.Clamp(runtimeLanguageIndex, 0, languages.Count - 1);
         }
 
         void InitSpeakers()
@@ -60,20 +200,6 @@
                 if (localizedSpeakers[i] == null) localizedSpeakers[i] = new LocalizedText();
                 localizedSpeakers[i].EnsureLanguageCount(languages.Count);
             }
-        }
-
-        public bool SetLanguage(int newLanguageIndex)
-        {
-            InitLanguages();
-            if (newLanguageIndex < 0 || newLanguageIndex >= languages.Count) return false;
-            runtimeLanguageIndex = newLanguageIndex;
-            return true;
-        }
-
-        public bool SetLanguage(string language)
-        {
-            InitLanguages();
-            return SetLanguage(languages.FindIndex(item => string.Equals(item, language, StringComparison.OrdinalIgnoreCase)));
         }
 
         public int AddLanguage(string language)
@@ -117,7 +243,6 @@
                 else if (graphNode is OptionNode optionNode) optionNode.RemoveLanguage(index);
 
             if (editorLanguageIndex >= index) editorLanguageIndex--;
-            if (runtimeLanguageIndex >= index) runtimeLanguageIndex--;
             return true;
         }
 
@@ -151,13 +276,16 @@
             speakers.Add("Speaker " + (speakers.Count + 1));
             LocalizedText localized = new LocalizedText(); localized.EnsureLanguageCount(languages.Count);
             localizedSpeakers.Add(localized);
+            EnsureIdentifiers();
         }
 
         public void RemoveSpeaker(int speakerIndex)
         {
             InitSpeakers();
+            EnsureIdentifiers();
             if (speakerIndex < 0 || speakerIndex >= speakers.Count) return;
             speakers.RemoveAt(speakerIndex);
+            speakerIds.RemoveAt(speakerIndex);
             localizedSpeakers.RemoveAt(speakerIndex);
             if (nodes == null) return;
             foreach (Node graphNode in nodes)
@@ -167,147 +295,128 @@
                 {
                     if (dialogueNode.dialogueList[i].person > speakerIndex) dialogueNode.dialogueList[i].person--;
                     else if (dialogueNode.dialogueList[i].person == speakerIndex)
-                        dialogueNode.dialogueList[i].person = speakers.Count == 0 ? 0 : Mathf.Clamp(speakerIndex, 0, speakers.Count - 1);
+                        dialogueNode.dialogueList[i].person = -1;
                 }
             }
         }
 
-        public DataType Next(int num = -1)
-        {
-            if (0 <= num) index = num;
-            if (!init) Init(); //Find the start node
-            else if (dataType != DataType.End) MoveOn();
-            GetInfo(); return dataType;
-        }
-
-        void Init()
-        {
-            EnsureLocalizationData(); init = true;
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                bool isStartNode = true;
-                if (nodes[i] is DialogueNode dNode) dNode.activeIndex = -1;
-                else if (nodes[i] is OptionNode oNode) oNode.isActive = false;
-                foreach (NodePort port in nodes[i].Inputs) isStartNode &= !port.IsConnected;
-                if (isStartNode) node = nodes[i];
-            }
-            if (node is DialogueNode dialogueNode) dialogueNode.activeIndex = 0;
-            else if (node is OptionNode optionNode) optionNode.isActive = true;
-
-        }
-
-        void GetInfo()
-        {
-            if (node is DialogueNode dialogueNode && index < dialogueNode.dialogueList.Count)
-            {
-                int person = dialogueNode.dialogueList[index].person;
-                dialogueInfo.sprite = dialogueNode.dialogueList[index].sprite;
-                dialogueInfo.name = person < 0 || person >= speakers.Count ? string.Empty : runtimeLanguageIndex == 0
-                    ? speakers[person] ?? string.Empty : localizedSpeakers[person].Get(runtimeLanguageIndex, speakers[person]);
-                dialogueInfo.context = dialogueNode.dialogueList[index].GetContext(runtimeLanguageIndex);
-                dataType = DataType.Dialogue;
-            }
-            else if (node is OptionNode optionNode && index == 0)
-            {
-                optionInfo = optionNode.GetOptions(runtimeLanguageIndex);
-                dataType = DataType.Option;
-            }
-            else dataType = DataType.End;
-        }
-
-        void MoveOn()
-        {
-            do
-            {
-                switch (node)
-                {
-                    case DialogueNode dialogueNode:
-                        dialogueNode.activeIndex = -1;
-                        if (dialogueNode.dialogueList[index].type >= DialogueNode.PortType.Output) GetNodeAndIndex("dialogueList " + index);
-                        else if (++index >= dialogueNode.dialogueList.Count) node = null;
-                        else dialogueNode.activeIndex = index;
-                        break;
-                    case OptionNode optionNode:
-                        optionNode.isActive = false;
-                        if (index >= optionNode.optionList.Count) node = null;
-                        else GetNodeAndIndex("optionList " + index);
-                        break;
-                    case EventNode eventNode:
-                        index = eventNode.Invoke(index); GetNodeAndIndex("eventList " + index);
-                        break;
-                    case CheckNode checkNode:
-                        GetNodeAndIndex(checkNode.GetNextStr());
-                        break;
-                }
-            } while (node is EventNode || node is CheckNode);
-        }
-
-        void GetNodeAndIndex(string s)
-        {
-            NodePort port = string.IsNullOrEmpty(s) ? null : node.GetOutputPort(s);
-            if (port == null || port.Connection == null) node = null;
-            else
-            {
-                port = port.Connection; node = port.node;
-                string[] names = port.fieldName.Split(' ');
-                index = 0; int.TryParse(names[names.Length - 1], out index);
-                if (node is DialogueNode dialogueNode) dialogueNode.activeIndex = 0;
-                else if (node is OptionNode optionNode) optionNode.isActive = true; 
-            }
-        }
     }
 
     [Serializable]
     public class LocalizedText
     {
         [SerializeField] List<string> translations = new List<string>();
+        [SerializeField] List<bool> translated = new List<bool>();
 
         public string Get(int languageIndex, string fallback)
         {
-            if (languageIndex <= 0) return fallback ?? string.Empty;
-            int translationIndex = languageIndex - 1;
-            if (translations != null && translationIndex < translations.Count && !string.IsNullOrEmpty(translations[translationIndex]))
-                return translations[translationIndex];
-            return fallback ?? string.Empty;
+            return GetRaw(languageIndex) ?? fallback ?? string.Empty;
         }
 
         public void Set(int languageIndex, string value)
         {
             if (languageIndex <= 0) return;
-            EnsureLanguageCount(languageIndex + 1); translations[languageIndex - 1] = value;
+            EnsureLanguageCount(languageIndex + 1);
+            translations[languageIndex - 1] = value ?? string.Empty;
+            translated[languageIndex - 1] = value != null;
+        }
+
+        public string GetRaw(int languageIndex)
+        {
+            int index = languageIndex - 1;
+            if (index < 0 || translations == null || index >= translations.Count) return null;
+            bool exists = translated != null && index < translated.Count ? translated[index] : !string.IsNullOrEmpty(translations[index]);
+            return exists ? translations[index] ?? string.Empty : null;
         }
 
         public void EnsureLanguageCount(int languageCount)
         {
             if (translations == null) translations = new List<string>();
+            if (translated == null) translated = new List<bool>();
+            while (translated.Count < translations.Count)
+                translated.Add(!string.IsNullOrEmpty(translations[translated.Count]));
             int translationCount = Mathf.Max(0, languageCount - 1);
-            while (translations.Count < translationCount) translations.Add(string.Empty);
+            while (translations.Count < translationCount)
+            { translations.Add(string.Empty); translated.Add(false); }
         }
 
         public void RemoveLanguage(int languageIndex)
         {
             if (languageIndex <= 0 || translations == null) return;
             int translationIndex = languageIndex - 1;
-            if (translationIndex < translations.Count) translations.RemoveAt(translationIndex);
+            if (translationIndex < translations.Count)
+            {
+                EnsureLanguageCount(0);
+                translations.RemoveAt(translationIndex); translated.RemoveAt(translationIndex);
+            }
         }
     }
 
     public static class SceneObjectReference
     {
-        public static GameObject Find(GameObject obj, string path)
+        public static bool SceneUnloaded(string path, string id)
         {
-            if (obj != null) return obj;
-            if (string.IsNullOrEmpty(path)) return null;
+#if UNITY_EDITOR
+            if (!string.IsNullOrEmpty(id) && UnityEditor.GlobalObjectId.TryParse(id, out UnityEditor.GlobalObjectId globalId))
+            {
+                string scenePath = UnityEditor.AssetDatabase.GUIDToAssetPath(globalId.assetGUID.ToString());
+                if (scenePath.EndsWith(".unity", StringComparison.OrdinalIgnoreCase))
+                    return !SceneManager.GetSceneByPath(scenePath).isLoaded;
+                if (globalId.identifierType == 2 && string.IsNullOrEmpty(scenePath)) return false;
+            }
+#endif
+            return !string.IsNullOrEmpty(path) && !SceneManager.GetSceneByName(path.Split('/')[0]).isLoaded;
+        }
+
+        public static bool TryFind(GameObject obj, string path, string id, out GameObject found, out string error)
+        {
+            found = obj; error = null;
+#if UNITY_EDITOR
+            if (!string.IsNullOrEmpty(id))
+            {
+                if (!UnityEditor.GlobalObjectId.TryParse(id, out UnityEditor.GlobalObjectId globalId))
+                { error = "Invalid GlobalObjectId: " + id; found = null; return false; }
+                var identified = UnityEditor.GlobalObjectId.GlobalObjectIdentifierToObjectSlow(globalId) as GameObject;
+                if (identified != null) found = identified;
+            }
+#endif
+            if (string.IsNullOrEmpty(path))
+            {
+                if (found != null) return true;
+                error = "Target object is missing."; return false;
+            }
             string[] names = path.Split('/');
-            if (names.Length < 2) return null;
+            if (names.Length < 2) { error = "Invalid scene object path: " + path; found = null; return false; }
             Scene scene = SceneManager.GetSceneByName(names[0]);
-            if (!scene.IsValid() || !scene.isLoaded) return null;
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                if (found != null) return true;
+                error = "Target scene is not loaded: " + names[0]; return false;
+            }
 
             Transform trans = null;
             foreach (GameObject root in scene.GetRootGameObjects())
-                if (root.name == names[1]) { trans = root.transform; break; }
-            for (int i = 2; trans != null && i < names.Length; i++) trans = trans.Find(names[i]);
-            return trans == null ? null : trans.gameObject;
+                if (root.name == names[1])
+                {
+                    if (trans != null) { error = "Ambiguous target path: " + path; found = null; return false; }
+                    trans = root.transform;
+                }
+            for (int i = 2; trans != null && i < names.Length; i++)
+            {
+                Transform child = null;
+                foreach (Transform candidate in trans)
+                    if (candidate.name == names[i])
+                    {
+                        if (child != null) { error = "Ambiguous target path: " + path; found = null; return false; }
+                        child = candidate;
+                    }
+                trans = child;
+            }
+            if (trans != null && found != null && trans.gameObject != found)
+            { error = "Object ID/reference and hierarchy path point to different objects: " + path; found = null; return false; }
+            if (found == null && trans != null) found = trans.gameObject;
+            if (found != null) return true;
+            error = "Missing target: " + path; return false;
         }
     }
 }
