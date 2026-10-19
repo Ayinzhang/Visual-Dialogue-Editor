@@ -49,21 +49,6 @@ namespace XNodeEditor {
         public void Controls() {
             wantsMouseMove = true;
             Event e = Event.current;
-            if (graphEditor.IsReadOnly) {
-                if (e.type == EventType.MouseDown && e.button == 0 && IsHoveringPort ||
-                    e.type == EventType.MouseDrag && e.button == 0 &&
-                        (currentActivity == NodeActivity.HoldNode || currentActivity == NodeActivity.DragNode || IsDraggingPort) ||
-                    e.type == EventType.DragUpdated || e.type == EventType.DragPerform ||
-                    (e.type == EventType.ValidateCommand || e.type == EventType.ExecuteCommand) && e.commandName != "Copy" ||
-                    e.type == EventType.KeyDown && (e.keyCode == KeyCode.F2 || e.keyCode == KeyCode.Return)) {
-                    e.Use();
-                    return;
-                }
-                if (e.type == EventType.MouseUp && (e.button == 1 || e.button == 2) && !isPanning) {
-                    e.Use();
-                    return;
-                }
-            }
             switch (e.type) {
                 case EventType.DragUpdated:
                 case EventType.DragPerform:

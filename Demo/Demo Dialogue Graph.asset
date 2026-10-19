@@ -17,7 +17,6 @@ MonoBehaviour:
   ports:
     keys:
     - before
-    - checkList
     - checkList 0
     - checkList 1
     - after
@@ -32,16 +31,6 @@ MonoBehaviour:
         reroutePoints: []
       _direction: 0
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: checkList
-      _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: System.Collections.Generic.List`1[[DialogueEditor.CheckNode+CheckInfo,
-        DialogueEditor.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: checkList 0
@@ -82,15 +71,13 @@ MonoBehaviour:
   obj: {fileID: 0}
   objGlobalId: 
   objPath: Demo Scene/Canvas/ChatPanel
-  compName: DialogueSystem
+  compName: DialogueEditor.DialogueSystem
   varName: cnt
   varType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
   checkList:
-  - id: 28c719929fea4a2f88bf4d9efa38e7c4
-    checkType: 0
+  - checkType: 0
     checkNum: 0
-  - id: a4504e2f79834678a1e6578fa221c786
-    checkType: 2
+  - checkType: 2
     checkNum: 0
 --- !u!114 &-4733053032447576540
 MonoBehaviour:
@@ -109,7 +96,6 @@ MonoBehaviour:
   ports:
     keys:
     - before
-    - optionList
     - optionList 0
     - optionList 1
     - after
@@ -127,16 +113,6 @@ MonoBehaviour:
         reroutePoints: []
       _direction: 0
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: optionList
-      _node: {fileID: -4733053032447576540}
-      _typeQualifiedName: System.Collections.Generic.List`1[[System.String, mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: optionList 0
@@ -175,18 +151,12 @@ MonoBehaviour:
   isMin: 0
   abstruct: Make Choices
   optionList:
-  - 2
-  - 10
-  localizedOptions:
   - translations:
     - 2
-    translated: 01
+    - 2
   - translations:
     - 10
-    translated: 01
-  optionIds:
-  - 18de931e97054440ad76b3587007c9a2
-  - 69dd74310a584cb7bb0486664f3b9fba
+    - 10
 --- !u!114 &-1819059237232150714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,17 +220,13 @@ MonoBehaviour:
   isMin: 0
   abstruct: Start dialogue
   dialogueList:
-  - id: 5d08274ad6e14eac994d14041b4686e3
-    sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 2
-    context: 1 + 1 = , which one is the right answer?
-    localizedContext:
+    context:
       translations:
+      - 1 + 1 = , which one is the right answer?
       - "\u8111\u7B4B\u6025\u8F6C\u5F2F\uFF0C1+1\u7B49\u4E8E\u51E0\u5462"
-      translated: 01
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,34 +246,14 @@ MonoBehaviour:
   - {fileID: 1769485216659402626}
   - {fileID: -1819059237232150714}
   speakers:
-  - ???
-  languages:
-  - English
-  - Chinese
-  localizedSpeakers:
   - translations:
+    - ???
     - 
-    translated: 00
-  editorLanguageIndex: 0
-  entryNode: {fileID: -1819059237232150714}
-  nodeIdentities:
-  - node: {fileID: -4733053032447576540}
-    id: 8c8c3e0006154f079d4a5bfa5b5c371a
-  - node: {fileID: 4006265045748941230}
-    id: 3910d815322944d19ca1f9c91e4d9450
-  - node: {fileID: -4921233339002650379}
-    id: 3413e8568ea34bd2a4d143f65ec0f6bb
-  - node: {fileID: 1769485216659402626}
-    id: b48f341fc144435bbcd4435330589439
-  - node: {fileID: -1819059237232150714}
-    id: 1494d39e33b84cb399a320c46622080a
-  speakerIds:
-  - 3ff80ff1142f47fd86c8a374854abccc
   dataType: 0
   optionInfo: []
   node: {fileID: 0}
+  entryNode: {fileID: -1819059237232150714}
   index: 0
-  languageIndex: 0
 --- !u!114 &1769485216659402626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,39 +366,27 @@ MonoBehaviour:
   isMin: 0
   abstruct: 
   dialogueList:
-  - id: 260c20af511f4218a4586c5fc25de4f1
-    sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
-    context: Well... Think more carefully.
-    localizedContext:
+    context:
       translations:
+      - Well... Think more carefully.
       - "\u989D\uFF0C\u518D\u591A\u60F3\u60F3\u5427"
-      translated: 01
-  - id: d69b7b2dfd834daaa67ee53caaea93f3
-    sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
-    context: Congratulations! Youget the right answer at one shot.
-    localizedContext:
+    context:
       translations:
+      - Congratulations! Youget the right answer at one shot.
       - "\u54C7\uFF0C\u4E00\u6B21\u6210\u529F"
-      translated: 01
-  - id: 522827309c1f441894a7593eb5675ca1
-    sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
     type: 3
-    context: Bingo, that is the right answer.
-    localizedContext:
+    context:
       translations:
+      - Bingo, that is the right answer.
       - "\u5BF9\u4E86\uFF0C\u8FD9\u624D\u662F\u6B63\u786E\u7B54\u6848"
-      translated: 01
 --- !u!114 &4006265045748941230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,8 +479,7 @@ MonoBehaviour:
   isMin: 0
   abstruct: Event
   eventList:
-  - id: 78da93074c854174a04622ba82d43eb5
-    obj: {fileID: 0}
+  - obj: {fileID: 0}
     portType: 3
     objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
     objPath: Demo Scene/Canvas/ChatPanel
@@ -556,8 +489,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 0
-  - id: d317456f632142f49b01ae2ee1bc1512
-    obj: {fileID: 0}
+  - obj: {fileID: 0}
     portType: 3
     objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
     objPath: Demo Scene/Canvas/ChatPanel

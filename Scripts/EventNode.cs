@@ -18,7 +18,6 @@ namespace DialogueEditor
 
         [Serializable] public class FuncInfo
         {
-            [HideInInspector] public string id;
             public GameObject obj;
             [HideInInspector] public PortType portType;
             [HideInInspector] public string objGlobalId, objPath, compName, funcName, declType, paraType, paraNum;

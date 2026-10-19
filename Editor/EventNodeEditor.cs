@@ -1,6 +1,5 @@
 namespace DialogueEditor
 {
-    using System;
     using System.Reflection;
     using UnityEditor;
     using UnityEngine;
@@ -40,26 +39,6 @@ namespace DialogueEditor
             if (!string.IsNullOrEmpty(typeName))
                 DrawValue(new Rect(rect.x + rect.width * 0.42f, rect.y + 24, rect.width * 0.58f, 18), item.FindPropertyRelative("paraNum"), DialogueValidation.FindType(typeName));
             DrawError(rect, index);
-        }
-
-        internal static bool Supported(Type type)
-        { return type.IsEnum || type == typeof(int) || type == typeof(float) || type == typeof(double) || type == typeof(bool) || type == typeof(string); }
-
-        GameObject DrawTarget(Rect rect, SerializedProperty owner)
-        {
-            SerializedProperty property = owner.FindPropertyRelative("obj");
-            string id = owner.FindPropertyRelative("objGlobalId").stringValue, path = owner.FindPropertyRelative("objPath").stringValue;
-            GameObject current = SceneObjectReferenceEditor.Find(property.objectReferenceValue as GameObject, id, path);
-            if (!EditorApplication.isPlaying && current != null && property.objectReferenceValue == null) property.objectReferenceValue = current;
-            EditorGUI.BeginChangeCheck();
-            GameObject selected = (GameObject)EditorGUI.ObjectField(rect, new GUIContent(string.Empty, path), current, typeof(GameObject), true);
-            if (EditorGUI.EndChangeCheck())
-            {
-                property.objectReferenceValue = selected;
-                owner.FindPropertyRelative("objGlobalId").stringValue = selected == null ? null : SceneObjectReferenceEditor.GetId(selected);
-                owner.FindPropertyRelative("objPath").stringValue = selected == null ? null : SceneObjectReferenceEditor.GetPath(selected);
-            }
-            return selected;
         }
 
         void Select(int index, MethodInfo method)

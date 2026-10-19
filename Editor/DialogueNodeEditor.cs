@@ -17,13 +17,12 @@ namespace DialogueEditor
             SerializedProperty item = serializedObject.FindProperty(ListName).GetArrayElementAtIndex(index);
             DrawSprite(new Rect(rect.x, rect.y + 2, 50, 50), item, index);
             SerializedProperty person = item.FindPropertyRelative("person"), type = item.FindPropertyRelative("type");
-            string[] speakers = Graph.GetSpeakerNames();
+            string[] speakers = Graph.GetSpeakerNames(DialogueSettings.Language);
             var choices = new string[speakers.Length + 1]; choices[0] = "(No speaker)";
             speakers.CopyTo(choices, 1);
             person.intValue = EditorGUI.Popup(new Rect(rect.x + 56, rect.y + 2, rect.width - 56, 18), person.intValue + 1, choices) - 1;
             EditorGUI.PropertyField(new Rect(rect.x + 56, rect.y + 24, rect.width - 56, 18), type, GUIContent.none);
-            DrawText(new Rect(rect.x, rect.y + 56, rect.width, 36),
-                item.FindPropertyRelative("context"), item.FindPropertyRelative("localizedContext"));
+            DrawText(new Rect(rect.x, rect.y + 56, rect.width, 36), item.FindPropertyRelative("context"));
             DrawError(new Rect(rect.x, rect.y, rect.width, 52), index);
         }
 
@@ -90,8 +89,6 @@ namespace DialogueEditor
         static void SetSprite(SerializedProperty item, Sprite sprite)
         {
             item.FindPropertyRelative("sprite").objectReferenceValue = sprite;
-            item.FindPropertyRelative("spriteGuid").stringValue = null;
-            item.FindPropertyRelative("spriteFileId").longValue = 0;
             GUI.changed = true;
         }
     }

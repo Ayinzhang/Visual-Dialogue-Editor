@@ -14,7 +14,6 @@ namespace XNodeEditor {
         public Rect position { get { return window.position; } set { window.position = value; } }
         /// <summary> Are we currently renaming a node? </summary>
         protected bool isRenaming;
-        public virtual bool IsReadOnly { get { return false; } }
 
         public virtual void OnGUI() { }
 

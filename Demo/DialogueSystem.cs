@@ -14,8 +14,10 @@ namespace DialogueEditor
         Image chaImg;
         Text bgText;
         Text[] optionTests;
-        [SerializeField] int languageIndex;
-        bool option;
+        bool option, advancing;
+
+        void OnEnable() { DialogueSettings.LanguageChanged += Refresh; Refresh(); }
+        void OnDisable() { DialogueSettings.LanguageChanged -= Refresh; }
 
         void Start()
         {
@@ -30,7 +32,8 @@ namespace DialogueEditor
         {
             if (graph != null) { graph.Stop(); Destroy(graph); }
             graph = Instantiate(graphs[graphIndex]);
-            graph.languageIndex = languageIndex;
+            option = false;
+            for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
             cha.SetActive(true); bg.SetActive(true);
             Next();
         }
@@ -44,9 +47,23 @@ namespace DialogueEditor
                 for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
             }
             DialogueGraph current = graph;
-            DialogueGraph.DataType state = current.Next(num);
+            advancing = true;
+            try { current.Next(num); }
+            finally { advancing = false; }
             if (current != graph) return;
-            switch (state)
+            Draw();
+        }
+
+        void Refresh()
+        {
+            if (graph == null || advancing) return;
+            graph.GetTypeInfo();
+            Draw();
+        }
+
+        void Draw()
+        {
+            switch (graph.dataType)
             {
                 case DialogueGraph.DataType.Dialogue:
                     chaImg.sprite = graph.dialogueInfo.sprite;

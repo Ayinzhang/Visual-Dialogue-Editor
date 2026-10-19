@@ -12,7 +12,6 @@ namespace DialogueEditor
         public enum CheckType { Equal, NotEqual, Greater, Less }
         [Serializable] public class CheckInfo
         {
-            [HideInInspector] public string id;
             public CheckType checkType;
             public string checkNum;
         }
@@ -21,8 +20,7 @@ namespace DialogueEditor
         [HideInInspector] public string abstruct;
         public GameObject obj;
         [HideInInspector] public string objGlobalId, objPath, compName, varName, varType;
-        [Output(dynamicPortList = true, connectionType = ConnectionType.Override)]
-        public List<CheckInfo> checkList = new List<CheckInfo>();
+        [HideInInspector] public List<CheckInfo> checkList = new List<CheckInfo>();
         [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
 
         public string GetNextStr()

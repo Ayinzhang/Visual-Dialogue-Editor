@@ -19,16 +19,7 @@ namespace DialogueEditor
         protected override void DrawFields()
         {
             var node = (CheckNode)target;
-            GameObject current = SceneObjectReferenceEditor.Find(node.obj, node.objGlobalId, node.objPath);
-            if (!EditorApplication.isPlaying && current != null && node.obj == null) serializedObject.FindProperty("obj").objectReferenceValue = current;
-            EditorGUI.BeginChangeCheck();
-            GameObject selected = (GameObject)EditorGUILayout.ObjectField("Target", current, typeof(GameObject), true);
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.FindProperty("obj").objectReferenceValue = selected;
-                serializedObject.FindProperty("objGlobalId").stringValue = selected == null ? null : SceneObjectReferenceEditor.GetId(selected);
-                serializedObject.FindProperty("objPath").stringValue = selected == null ? null : SceneObjectReferenceEditor.GetPath(selected);
-            }
+            GameObject selected = DrawTarget(EditorGUILayout.GetControlRect(), label: "Target");
             if (EditorGUILayout.DropdownButton(new GUIContent(node.compName + "." + node.varName), FocusType.Keyboard))
             {
                 var menu = new GenericMenu();
@@ -37,7 +28,7 @@ namespace DialogueEditor
                     if (component == null) continue;
                     foreach (FieldInfo field in component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
                     {
-                        if (!EventNodeEditor.Supported(field.FieldType)) continue;
+                        if (!Supported(field.FieldType)) continue;
                         FieldInfo chosen = field;
                         menu.AddItem(new GUIContent(component.GetType().Name + "/" + field.Name), false, () => Select(chosen));
                     }

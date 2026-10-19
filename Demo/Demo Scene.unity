@@ -224,7 +224,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9ddead0fc8f94448945879e31b3682e, type: 2}
   - {fileID: 11400000, guid: cb9d4e1dd07a3534b809ba26264b2015, type: 2}
   cnt: 0
-  languageIndex: 0
 --- !u!1 &179482560
 GameObject:
   m_ObjectHideFlags: 0
