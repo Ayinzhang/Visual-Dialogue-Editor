@@ -1,4 +1,0 @@
-{
-    "name": "DialogueEditor.Demo",
-    "references": ["DialogueEditor.Runtime", "XNode", "UnityEngine.UI"]
-}

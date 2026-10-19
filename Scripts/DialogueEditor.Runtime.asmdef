@@ -1,4 +1,0 @@
-{
-    "name": "DialogueEditor.Runtime",
-    "references": ["XNode"]
-}

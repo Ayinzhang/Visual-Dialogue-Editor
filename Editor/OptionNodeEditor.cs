@@ -1,19 +1,16 @@
 namespace DialogueEditor
 {
+    using UnityEditor;
     using UnityEngine;
-    using XNodeEditor;
 
     [CustomNodeEditor(typeof(OptionNode))]
     public class OptionNodeEditor : DialogueNodeEditorBase
     {
-        protected override string ListName => "optionList";
-        protected override float RowHeight => 42;
-        protected override void InitItem(int index) { ((OptionNode)target).optionList[index] = new LocalizedText(); }
-        protected override void DrawItem(Rect rect, int index)
-        {
-            DrawText(new Rect(rect.x, rect.y + 2, rect.width, 36),
-                serializedObject.FindProperty(ListName).GetArrayElementAtIndex(index));
-            DrawError(rect, index);
-        }
+        protected override float RowHeight => 40;
+
+        protected override object NewItem() => new LocalizedText();
+
+        protected override void DrawItem(Rect rect, SerializedProperty item, int index) =>
+            DrawText(new Rect(rect.x, rect.y + 2, rect.width, rect.height - 4), item);
     }
 }

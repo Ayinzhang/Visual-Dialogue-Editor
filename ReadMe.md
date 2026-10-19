@@ -2,72 +2,86 @@
 
 [中文版](ReadMe_zh.md)
 
-A Unity visual dialogue editor based on [xNode](https://github.com/Siccity/xNode), with dialogue, choices, events, conditions, and localization. Edit dialogues directly in Unity; the graph asset is the runtime playback source.
+This is a simple Unity visual dialogue editor based on [xNode](https://github.com/Siccity/xNode), with dialogue, choices, events, conditions, and localization. If you have used Visual Scripting or Amplify Shader Editor, the node editing workflow should feel familiar.
 
-### Create and edit
+### Create
 
-Right-click in the Project window and choose **Create > Dialogue Graph**, then double-click the asset. Manage project languages in **Project Settings > Dialogue Editor**; **Edit > Edit Languages** opens the same settings. Speakers remain local to each graph and are managed in its Inspector or **Edit > Edit Speakers**. The language dropdown changes the shared project language in every graph; missing translations fall back to the default language.
+Right-click in the Project window and choose **Create > Dialogue Graph**, then double-click the asset to open the editor.
 
-The top toolbar stays fixed while zooming or panning. Toolbar drawing and playback edit protection live in the plugin's `Editor` folder; the bundled `xNode` folder matches the `9402be4` baseline without the later read-only patches.
+Before editing, use **Languages** in the top toolbar to open **Project Settings > Dialogue** and add your languages. Use **Speakers** to open the current graph's speaker window and add speaker names. Languages are shared across the project; speakers belong to individual graphs.
 
-Leave non-default dialogue text, options, or speaker names empty to use the default language. Graph content and language structure are read-only during playback; playback highlights, panning, zoom, and switching the current language remain available. Switching languages refreshes the displayed dialogue or options without advancing playback.
+Use **Language** in the upper-right corner to edit dialogue, choices, and speaker names in each language. Index 0 is the default language; empty translations fall back to it during playback. The default language can be renamed but not moved or removed. Removing or reordering other languages updates translations in all saved dialogue graphs. Reordering speakers updates dialogue references; removing a speaker leaves its dialogue lines without a speaker.
 
-Project languages and graph speakers use reorderable lists. The default language stays above the language list and cannot be moved or removed. Adding, removing, or reordering languages updates text slots in every saved graph, including unopened assets; deletion requires confirmation. Read-only assets prevent the entire structural operation, and Undo restores the settings and affected graphs together. Speaker structure can be changed in the default language; reordering speakers also updates dialogue references.
+<div style="display: flex; justify-content: space-between; gap: 10px;">
+  <img src="img (1).png" style="width: 33%; object-fit: contain;" />
+  <img src="img (2).png" style="width: 33%; object-fit: contain;" />
+  <img src="img (3).png" style="width: 33%; object-fit: contain;" />
+</div>
+
+### Edit
+
+Right-click an empty area of the canvas to create a node, add items using its list's add button, and connect ports to build the dialogue flow. There are four node types:
 
 | Node | Purpose |
 |------|---------|
-| Dialogue | Display a Sprite, speaker, and text. Items can have input/output ports. |
-| Option | Present choices and follow the selected choice's connection. |
-| Event | Invoke a public component method, with no argument or one supported argument. |
-| Check | Compare a public component field and follow the first matching condition. |
+| Dialogue | Set a Sprite, speaker, and text for each dialogue line. |
+| Option | Present choices and follow the player's selected choice. |
+| Event | Invoke a public instance method on a scene component, with no argument or one `int`, `float`, `bool`, `string`, or enum argument. |
+| Check | Read a public instance field on a scene component, using the same supported types, and follow the first matching condition. |
 
-- The first created node becomes the entry. Right-click another node and choose **Set as Entry** to change it.
-- An output port has at most one destination. An unconnected output ends playback; dialogue/event items without an output port advance to the next item in their list. No matching check condition also ends playback.
-- Cycles are allowed. Event/check execution is synchronous, without a step limit or cross-frame continuation. Ensure automatic cycles eventually exit; an infinite automatic cycle will block the main thread.
-- **Show less** displays only the summary; item connections are drawn from the node's `before`/`after` ports. Folding does not rewrite connections; expand the node to edit them. The summary field is hidden when expanded.
-- Status changes affect **borders**, not node background colors: green for entry, yellow for the current playback node/item, red for errors. Error status takes priority on the node border.
-- Sprites use Unity's asset references directly. Missing scene/component/member references retain their configuration and are highlighted in place. Scene object IDs and paths are kept for reference recovery; graph content does not require additional string IDs.
-- When a target scene is not loaded, binding checks are deferred with an informational message rather than a red error. Paths and member configuration remain intact and are checked again when the scene is opened. Missing targets in loaded scenes remain errors; scenes are not loaded automatically.
-- Click a Sprite preview to select an asset, drag a Sprite onto it, or right-click to clear it. Preview drawing and status borders follow graph zoom.
+Each Dialogue and Event item can configure its own ports: `None` for no ports, `Input` for input only, `Output` for output only, and `All` for both. Connecting to an item's input starts at that item. Option and Check nodes use a node-level `Before` input with separate outputs for their items. Checks support equal, not equal, greater than, and less than.
 
-The two graphs in `Demo` use the new entry and folding logic. There is no automatic migration for the old folding representation.
+The first created node becomes the entry; right-click a node and choose **Set as Entry** to change it. **An item with an unconnected output ends playback. An item without an output advances to the next item, or ends playback at the end of its list.** A Check node with no matching condition also ends playback. Events and checks run synchronously without individual clicks, so avoid automatic cycles that cannot exit.
 
-### Playback
+Select Sprites through their object fields. For events and checks, first select a target object in an open scene, then select its component method or field. Targets are stored as `Scene/Root/Child` paths, so the scene must also be loaded at runtime. Reselect the binding after changing target names, hierarchy, or bound members.
 
-**Graph advances the dialogue and provides results; DialogueSystem only selects graphs and updates UI.** Graph's `Next()` initializes the entry, then uses `MoveOn()`, `GetNodeAndIndex()`, and `GetTypeInfo()` to advance nodes, invoke events, evaluate conditions, and read data. The Event's `InvokeMethod()` and Check's `GetNextStr()` remain on their respective Nodes.
+If a node is too long, click **Fold** to show only its summary while keeping its connections. Click **Expand** to edit and connect it again. Node colors indicate entry (green), current playback (yellow), and issues (red), with issues taking priority. Items also use yellow or red side borders for playback or issues. Hover over the issue count in the top toolbar for details. Component bindings are not checked while their target scene is unloaded; open the scene to check them.
 
-As in the original version, instantiate an asset before playback: `Instantiate(graphs[graphIndex])`. The current node, item index, and results belong to that playback instance; the current language is shared by the project. Node definitions remain read-only, without activity flags written into shared nodes; multiple Systems can play the same asset without overwriting each other's positions.
+<div style="display: flex; justify-content: space-between; gap: 10px;">
+  <img src="img (4).png" style="width: 49%; object-fit: contain;" />
+  <img src="img (5).png" style="width: 49%; object-fit: contain;" />
+</div>
 
-Attach `Demo/DialogueSystem.cs` to a scene object and assign `cha`, `bg`, `options`, and `graphs`. `Start()` calls `Init()` to select the first graph and display its first item. Dialogue clicks call `Next()`; option buttons call `Next(choiceIndex)` with a zero-based index. `Next(-1)` leaves a pending choice unchanged. No `Update()` or cross-frame continuation is required.
+### Use
+
+Load a `DialogueGraph` asset or assign it in the Inspector, then instantiate it before use. Do not advance the asset itself. Generally, you only need `Next()`, `dialogueInfo`, and `optionInfo`: `Next()` returns the current step's type, and you read the corresponding data for your own UI.
+
+This example reads the first result, where `asset` is your referenced `DialogueGraph` asset:
 
 ```csharp
-dialogueSystem.Init(0); // Switch/restart a graph and display its first item
-dialogueSystem.Next();  // Advance when dialogue is clicked
-dialogueSystem.Next(1); // Call when the second option is selected
+using DialogueEditor;
+using UnityEngine;
+
+DialogueGraph graph = Object.Instantiate(asset);
+switch (graph.Next())
+{
+    case DialogueGraph.DataType.Dialogue:
+        Sprite sprite = graph.dialogueInfo.sprite;
+        string text = graph.dialogueInfo.name + ":\n" + graph.dialogueInfo.context;
+        // Display sprite and text in your UI.
+        Debug.Log(text);
+        break;
+    case DialogueGraph.DataType.Option:
+        for (int i = 0; i < graph.optionInfo.Count; i++)
+            Debug.Log(i + ": " + graph.optionInfo[i]);
+        // Show choices, then call graph.Next(choiceIndex) after selection.
+        break;
+    case DialogueGraph.DataType.End:
+        // Close the dialogue UI.
+        break;
+}
 ```
 
-As in the original version, System uses a single `bool option` to wait for a choice and updates UI from Graph's `DataType.Dialogue / Option / End` result; it does not traverse or identify concrete nodes. `graphs` stores the asset list, while the nonserialized `graph` refers to the current playback instance; `graph.node` and `graph.index` hold its playback position. The editor associates playback highlights with the entry node's owning asset rather than comparing the playback instance directly with an asset. The editor still validates and highlights configuration issues. Execution exceptions are reported directly in the Unity Console, without a separate error-handling flow in the demo script.
+The first `Next()` starts at the entry. Subsequent dialogue clicks call `Next()` or `Next(-1)`; choices call `Next(choiceIndex)` with a zero-based index. Handle the returned result as above after each call. **While displaying choices, wait for the player rather than calling parameterless `Next()` again.** Your own System controls this.
 
-For custom UI integration, call the playback instance's `Next(num)` and read `dialogueInfo.sprite / name / context` or `optionInfo` according to its return type. Set `DialogueSettings.Language` to an index in `DialogueSettings.Instance.languages`. Subscribe to `DialogueSettings.LanguageChanged`, call the instance's `GetTypeInfo()`, and redraw the current result without calling `Next()`; unsubscribe when disabled. The demo System already does this. Before switching graphs, call the instance's `Stop()` to end the old flow, then destroy it. Do not advance the Graph asset directly.
+Set `DialogueSettings.Language = languageIndex` to switch languages, using the list order in Project Settings. Subscribe to `DialogueSettings.LanguageChanged`, call `graph.GetInfo()` in the handler, and refresh your UI to update text without advancing. Unsubscribe when no longer needed. Language selection is shared across the project; switching during Play does not rewrite the settings asset. Keep a single `Resources/DialogueSettings.asset`.
 
-Dialogue text, options, and speaker names each use `LocalizedText`, with one string list indexed by project language, including the default at index 0. `Get(language)` reads with fallback; `GetRaw(language)` reads the editable slot, and `Set(language, value)` writes it. Playback results remain plain strings. Reads do not initialize or modify text data. `GetSpeaker(index, language)` and `SetSpeakerName(index, language, value)` take an explicit language index. Use `AddSpeaker(name)` to add a speaker. `EnsureLocalizationData()` aligns text slots when opening/editing a graph or adding content, not during reads. Change the language directory only through Project Settings so every graph stays aligned. Only the current data format is supported; no legacy translation or assembly-name migration is performed.
+To stop and release a playback instance, call `graph.Stop()`, then `Object.Destroy(graph)`. Create a new instance to restart or switch graphs.
 
-The single `Resources/DialogueSettings.asset` stores the project language list and edit-time selection, which is also the initial playback language. Runtime selection is nonserialized and resets on each Play session, including when domain reload is disabled; switching it does not rewrite the asset. Keep this asset unique. Both sample graphs include English at index 0 and Chinese at index 1.
+#### Graph Switching
 
-### Switching graphs with Event nodes
+`Demo/DialogueSystem.cs` is only an integration example, not an editor dependency. Write your own System as needed. The example uses uGUI `Image` and `Text`: assign `cha` (character image), `bg` (dialogue panel with text), `options` (choice objects with text), and `graphs` (graph assets), following the Demo scene.
 
-`DialogueSystem` exposes `DialogueGraph[] graphs`, `Init(int graphIndex = 0)`, and `Next(int num = -1)`. Assign the first graph to `graphs[0]`. `Init(index)` stops and releases the old playback instance, instantiates the target graph, and displays its first item; do not call `Next()` again just to start it. The shared project language is retained when switching graphs.
+In the example, `Init(0)` starts the first graph, `Next()` advances dialogue, and `Next(0)` selects the first option. Parameterless `Next()` is ignored while waiting for a choice. `Start()` already calls `Init()`, and language-change refresh is already connected.
 
-Graphs and Systems do not serialize their own language selection. The shared language dropdown is in graph windows and Project Settings; Systems use Unity's default Inspector.
-
-Graph canvas state, the fixed toolbar, and the graph Inspector/speaker list are kept in `DialogueGraphEditor`, `DialogueGraphToolbar`, and `DialogueGraphInspector`. Node canvas editors share `DialogueNodeEditorBase`; `DialogueNodeAssetEditor` only provides the node asset's Edit graph button and read-only Inspector fields during playback.
-
-To jump from an Event node, select the GameObject containing your `DialogueSystem`, choose its **Init(int)** method, and supply the target's zero-based index in `graphs`. `Init` switches graphs and displays the first item immediately; after the event returns, the old graph's remaining items/connections are not executed. Switching back to the same graph restarts it. No extra jump node is needed.
-
-### Layout
-
-- `Scripts`: graph definition, four node types, localization data, and structural/binding validation.
-- `Resources`: the single project-wide dialogue settings asset.
-- `Editor`: graph/node UI, Inspector, languages/speakers, and reference selection.
-- `Demo`: sample scene, two graph assets, the DialogueSystem that reads and executes them, UI, and images.
-- `xNode`: bundled graph framework; see `ThirdPartyNotice.txt`.
+To switch graphs through an event, select the object containing this `DialogueSystem` in an Event node, choose **Init(int)**, and enter the target's index in `graphs`. It stops and releases the old instance and immediately displays the new graph's first item. Switching to the same graph restarts it. A custom System can expose its own switching method, but should stop the old instance first so the old flow does not continue when the event returns.

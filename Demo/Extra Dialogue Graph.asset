@@ -247,107 +247,77 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: 
+  summary: 
   dialogueList:
-  - id: 73c15fdbd29e43ebb12c7faad8269a84
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 1
     context:
       translations:
-      - "Oh, this... There's a drawing inside..."
+      - Oh, this... There's a drawing inside...
       - "\u554A \u9019\u500B \u88CF\u9762\u6709\u756B\u4E86\u4E9B\u4EC0\u9EBD..."
-  - id: 0d9b4411cce74744a13906366785a142
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "Mm-hm."
+      - Mm-hm.
       - "\u55EF"
-  - id: 2dd5dd45f0b347f09f2c7803e00be39a
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "I was going to throw it away anyway, so it doesn't matter!"
+      - I was going to throw it away anyway, so it doesn't matter!
       - "\u53CD\u6B63\u7B49\u6703\u4E5F\u6703\u6254\u6389\u7684\u6240\u4EE5\u90A3\u6A23\u5C31\u597D\u4E86!"
-  - id: 666d0cf74ac94c8c993ba490db5d053a
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 1
     context:
       translations:
-      - "Throw it away...? But it's a drawing."
+      - Throw it away...? But it's a drawing.
       - "\u6254\u6389...\u9019\u662F\u756B\u554A"
-  - id: a2f9428f92fd49129360a71cb56e11af
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Did you draw this?"
+      - Did you draw this?
       - "\u662F\u4F60\u756B\u7684\u5427?"
-  - id: e7db8ef8678a482c897e2a585149a948
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "Yeah..."
+      - Yeah...
       - "\u662F\u554A\u2014"
-  - id: 923b638ba3a34aadaba0518bc634e12f
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "It's amazing... The way you've drawn this..."
+      - It's amazing... The way you've drawn this...
       - "\u771F\u53B2\u5BB3...\u9019\u7A2E\u756B\u6CD5..."
-  - id: 772c0819f5b64afe8bffafa102e74445
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "How do you even get colors like these...?"
+      - How do you even get colors like these...?
       - "\u5230\u5E95\u600E\u6A23\u624D\u80FD\u756B\u51FA\u9019\u7A2E\u8272\u5F69\u5462..."
-  - id: cc839140fa8045d394f0987c7bba9841
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Throwing it away... What a waste!"
+      - Throwing it away... What a waste!
       - "\u6254\u6389\u4EC0\u9EBD\u7684...\u771F\u662F\u592A\u6D6A\u8CBB\u4E86\uFF01"
-  - id: b663e6b052024d20b409426e4dceb63c
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 2
     context:
       translations:
-      - "I-if you don't want it, then give it to me!"
+      - I-if you don't want it, then give it to me!
       - "\u4F60 \u4F60\u4E0D\u8981\u7684\u8A71\u5C31\u9001\u7D66\u6211\u5427!"
 --- !u!114 &-1608095426900796545
 MonoBehaviour:
@@ -590,107 +560,78 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: 
+  summary: 
   dialogueList:
-  - id: 36bfc0b22f9d4ef7b96bd950fc5b3e97
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 1
     context:
       translations:
-      - "Huh? What do you want it for?"
+      - Huh? What do you want it for?
       - "\u8A92\u2014\u4F60\u8981\u4F86\u5E79\u561B"
-  - id: 07e492603ff84dde9779969a3fe8ada8
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "You're so strange..."
+      - You're so strange...
       - "\u771F\u5947\u602A\u2014"
-  - id: 9875a17cf7a947c991cf3f9dc32d6d71
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "But no. I was going to throw it away."
+      - But no. I was going to throw it away.
       - "\u4F46\u662F\u4E0D\u884C \u9019\u662F\u8981\u6254\u7684"
-  - id: cb0bcd24feb1433cb752fdb099be6137
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Huh?"
+      - Huh?
       - "\u8A92"
-  - id: 311e49705c1641b3a9878813bbca3032
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "...Still, I'm glad you said you wanted it."
+      - ...Still, I'm glad you said you wanted it.
       - "...\u4E0D\u904E\u4F60\u8AAC\u60F3\u8981\u6211\u5F88\u9AD8\u8208"
-  - id: 3472cddb14f44e45ae65a31363830efd
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Will you keep drawing in the future?"
+      - Will you keep drawing in the future?
       - "\u5C07\u4F86\u6703\u7E7C\u7E8C\u756B\u756B\u4E4B\u985E\u55CE?"
-  - id: 211d265e812c46cea199a461b07cdded
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "...Mm... I'd like to, but I don't think I can."
+      - ...Mm... I'd like to, but I don't think I can.
       - "...\u5514\u2014\u96D6\u7136\u60F3\u4F46\u662F\u6C92\u53EF\u80FD\u5427"
-  - id: 581f0842a18a4045914ceb4f48a29bb1
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Wh-why?! You're so good at it!"
+      - Wh-why?! You're so good at it!
       - "\u70BA \u7232\u4EC0\u9EBD\u2014\uFF01\u660E\u660E\u756B\u7684\u90A3\u9EBD\u597D\uFF01"
-  - id: 9eb20c49e0b4491c8a90e4a2ddb1765d
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "There are plenty of people who can draw as well as I can."
+      - There are plenty of people who can draw as well as I can.
       - "\u6BD4\u65B9\u8AAC\u50CF\u6211\u9019\u7A2E\u7A0B\u5EA6\u7684\u4EBA\u6EFF\u8857\u90FD\u662F"
-  - id: e82b9a8cdbdd40628c6c5710f58ea408
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "And there are as many people who'll keep improving as there are stars in the sky."
+      - And there are as many people who'll keep improving as there are stars in
+        the sky.
       - "\u7136\u5F8C\u5728\u54EA\u88CF\u8CB7\u7684\u6703\u7E7C\u7E8C\u9032\u6B65\u7684\u4EBA\u4E5F\u591A\u5982\u5929\u4E0A\u7684\u7E41\u661F"
 --- !u!114 &-638595666157657635
 MonoBehaviour:
@@ -709,7 +650,6 @@ MonoBehaviour:
   ports:
     keys:
     - before
-    - optionList
     - optionList 0
     - optionList 1
     - after
@@ -724,16 +664,6 @@ MonoBehaviour:
         reroutePoints: []
       _direction: 0
       _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: optionList
-      _node: {fileID: -638595666157657635}
-      _typeQualifiedName: System.Collections.Generic.List`1[[System.String, mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
-        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: optionList 0
@@ -770,17 +700,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: 
+  summary: 
   optionList:
   - translations:
-    - "What a strange person..."
+    - What a strange person...
     - "\u5947\u602A\u7684\u4EBA..."
   - translations:
-    - "Throw it away...?"
+    - Throw it away...?
     - "\u6254\u6389...?"
-  optionIds:
-  - fbd73155362b4144a78f970409d4bbe5
-  - e2fef7cd771c4edfae749bc2255e2451
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,28 +727,12 @@ MonoBehaviour:
   - {fileID: -1608095426900796545}
   speakers:
   - translations:
-    - "Hikari"
+    - Hikari
     - "\u5149"
   - translations:
-    - "Chie"
+    - Chie
     - "\u5343\u7E6A"
   entryNode: {fileID: 7605061190542546627}
-  nodeIdentities:
-  - node: {fileID: 7605061190542546627}
-    id: af04e61ea8f24dad9b0ff8f8cafdb9aa
-  - node: {fileID: -638595666157657635}
-    id: a8bc7d53bf1c415780bbae28b70fe890
-  - node: {fileID: -7156879366625017116}
-    id: b9dad174cd0f49d4a4d40d6e1d679a51
-  - node: {fileID: -1608095426900796545}
-    id: db99f0ee763c46719358cc94f61fd448
-  speakerIds:
-  - 8a36deef3177405aaafb5667deec3df3
-  - 93a98fdeb14f4e9a87b9679e00f53764
-  dataType: 0
-  optionInfo: []
-  node: {fileID: 0}
-  index: 0
 --- !u!114 &7605061190542546627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1003,75 +914,54 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: 
+  summary: 
   dialogueList:
-  - id: 6e53f1c097274f91b5b040c4d9068264
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "Hey, is that... a paper airplane?"
+      - Hey, is that... a paper airplane?
       - "\u5450 \u90A3\u662F...\u7D19\u98DB\u6A5F?"
-  - id: 51f7e9b47a044646bc9e8ebada9fa7eb
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "Yeah."
+      - Yeah.
       - "\u55EF"
-  - id: bab7ca556fc64e05bbfecd3da90d5023
-    sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
     person: 0
     type: 0
     context:
       translations:
-      - "The ones you just threw?"
+      - The ones you just threw?
       - "\u525B\u624D\u653E\u7684\u90A3\u4E9B?"
-  - id: 56b06fa7c85f4d8f843887234353fd4b
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "Yeah."
+      - Yeah.
       - "\u55EF"
-  - id: cff70f8f0b2944edaf9b05e0171ff279
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "I was actually going to throw them away."
+      - I was actually going to throw them away.
       - "\u6211\u672C\u4F86\u662F\u60F3\u6254\u6389\u4ED6\u5011\u7684"
-  - id: 2a7c89daa4404e568bd01e570e3828a5
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 0
     context:
       translations:
-      - "But I couldn't bring myself to tear them up."
+      - But I couldn't bring myself to tear them up.
       - "\u4F46\u662F\u6211\u6C92\u6709\u52C7\u6C23\u53BB\u6495\u788E\u5B83\u5011"
-  - id: 109f3809aab643718fd368df08d0b418
-    sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
-    spriteGuid: 
-    spriteFileId: 0
+  - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
     person: 1
     type: 2
     context:
       translations:
-      - "So I just folded them up, and they ended up like this."
+      - So I just folded them up, and they ended up like this.
       - "\u6240\u4EE5\u5C31\u96A8\u4FBF\u6298\u4E86 \u7136\u5F8C\u8B8A\u6210\u4E86\u9019\u6A23"

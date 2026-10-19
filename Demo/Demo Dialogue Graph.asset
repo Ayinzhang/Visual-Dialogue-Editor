@@ -35,7 +35,7 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: checkList 0
       _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, DialogueEditor.Runtime,
+      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, Assembly-CSharp-firstpass,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: inList 1
@@ -47,7 +47,7 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: checkList 1
       _node: {fileID: -4921233339002650379}
-      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, DialogueEditor.Runtime,
+      _typeQualifiedName: DialogueEditor.CheckNode+CheckInfo, Assembly-CSharp-firstpass,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: inList 2
@@ -67,9 +67,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: Check
-  obj: {fileID: 0}
-  objGlobalId: 
+  summary: Check
   objPath: Demo Scene/Canvas/ChatPanel
   compName: DialogueEditor.DialogueSystem
   varName: cnt
@@ -149,7 +147,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: Make Choices
+  summary: Make Choices
   optionList:
   - translations:
     - 2
@@ -218,7 +216,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: Start dialogue
+  summary: Start dialogue
   dialogueList:
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
@@ -248,12 +246,8 @@ MonoBehaviour:
   speakers:
   - translations:
     - ???
-    - 
-  dataType: 0
-  optionInfo: []
-  node: {fileID: 0}
+    - ???
   entryNode: {fileID: -1819059237232150714}
-  index: 0
 --- !u!114 &1769485216659402626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,7 +358,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: 
+  summary: 
   dialogueList:
   - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
     person: 0
@@ -477,25 +471,17 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   isMin: 0
-  abstruct: Event
+  summary: Event
   eventList:
-  - obj: {fileID: 0}
-    portType: 3
-    objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
+  - portType: 3
     objPath: Demo Scene/Canvas/ChatPanel
     compName: DialogueEditor.DialogueSystem
     funcName: DemoPrint
-    declType: DialogueEditor.DialogueSystem, DialogueEditor.Demo, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 0
-  - obj: {fileID: 0}
-    portType: 3
-    objGlobalId: GlobalObjectId_V1-2-ece8a1ab9b02f4d469db9073379f2307-76199444-0
+  - portType: 3
     objPath: Demo Scene/Canvas/ChatPanel
     compName: DialogueEditor.DialogueSystem
     funcName: DemoPrint
-    declType: DialogueEditor.DialogueSystem, DialogueEditor.Demo, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 1

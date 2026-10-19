@@ -1,68 +1,55 @@
 namespace DialogueEditor
 {
+    using System;
     using System.Reflection;
     using UnityEditor;
     using UnityEngine;
-    using XNodeEditor;
 
     [CustomNodeEditor(typeof(CheckNode))]
     public class CheckNodeEditor : DialogueNodeEditorBase
     {
-        protected override string ListName => "checkList";
-        protected override float RowHeight => 28;
-        protected override void InitItem(int index)
-        {
-            var node = (CheckNode)target;
-            node.checkList[index] = new CheckNode.CheckInfo { checkNum = DialogueValidation.FindType(node.varType) == typeof(string) ? string.Empty : "0" };
-        }
+        CheckNode Check => (CheckNode)Node;
+        Type VarType => string.IsNullOrEmpty(Check.varType) ? null : Type.GetType(Check.varType);
+
+        protected override float RowHeight => 24;
+
+        protected override object NewItem() => new CheckNode.CheckInfo { checkNum = VarType == typeof(string) ? "" : "0" };
 
         protected override void DrawFields()
         {
-            var node = (CheckNode)target;
-            GameObject selected = DrawTarget(EditorGUILayout.GetControlRect(), label: "Target");
-            if (EditorGUILayout.DropdownButton(new GUIContent(node.compName + "." + node.varName), FocusType.Keyboard))
-            {
-                var menu = new GenericMenu();
-                if (selected != null) foreach (Component component in selected.GetComponents<Component>())
+            DrawTarget(EditorGUILayout.GetControlRect(), serializedObject.FindProperty("objPath"));
+            Rect line = EditorGUILayout.GetControlRect();
+            string label = string.IsNullOrEmpty(Check.varName) ? "Select field" : Check.compName.Substring(Check.compName.LastIndexOf('.') + 1) + "." + Check.varName;
+            if (EditorGUI.DropdownButton(line, new GUIContent(label), FocusType.Keyboard)) FieldMenu().DropDown(line);
+        }
+
+        protected override void DrawItem(Rect rect, SerializedProperty item, int index)
+        {
+            Rect line = new Rect(rect.x, rect.y + 3, 90, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(line, item.FindPropertyRelative("checkType"), GUIContent.none);
+            if (VarType != null) DrawValue(new Rect(line.xMax + 4, line.y, rect.width - 94, line.height), item.FindPropertyRelative("checkNum"), VarType);
+        }
+
+        GenericMenu FieldMenu()
+        {
+            var menu = new GenericMenu();
+            GameObject obj = DialogueReflection.Find(Check.objPath);
+            if (obj == null) { menu.AddDisabledItem(new GUIContent("Assign a target in an open scene")); return menu; }
+            foreach (Component component in obj.GetComponents<Component>())
+                foreach (FieldInfo field in component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    if (component == null) continue;
-                    foreach (FieldInfo field in component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+                    if (!Supported(field.FieldType)) continue;
+                    string compName = component.GetType().FullName;
+                    menu.AddItem(new GUIContent(component.GetType().Name + "/" + field.Name), false, () => Change("Select Field", () =>
                     {
-                        if (!Supported(field.FieldType)) continue;
-                        FieldInfo chosen = field;
-                        menu.AddItem(new GUIContent(component.GetType().Name + "/" + field.Name), false, () => Select(chosen));
-                    }
+                        if (VarType != field.FieldType)
+                            foreach (CheckNode.CheckInfo info in Check.checkList) info.checkNum = field.FieldType == typeof(string) ? "" : "0";
+                        Check.compName = compName;
+                        Check.varName = field.Name;
+                        Check.varType = field.FieldType.AssemblyQualifiedName;
+                    }));
                 }
-                menu.ShowAsContext();
-            }
-            foreach (DialogueIssue issue in DialogueGraphEditor.Issues(Graph).FindAll(issue => issue.node == target && issue.binding))
-                EditorGUILayout.HelpBox(issue.message, issue.deferred ? MessageType.Info : MessageType.Error);
-        }
-
-        protected override void DrawItem(Rect rect, int index)
-        {
-            SerializedProperty item = serializedObject.FindProperty(ListName).GetArrayElementAtIndex(index);
-            EditorGUI.PropertyField(new Rect(rect.x, rect.y + 2, rect.width * 0.45f, 18), item.FindPropertyRelative("checkType"), GUIContent.none);
-            DrawValue(new Rect(rect.x + rect.width * 0.48f, rect.y + 2, rect.width * 0.52f, 18), item.FindPropertyRelative("checkNum"),
-                DialogueValidation.FindType(((CheckNode)target).varType));
-            DrawError(rect, index);
-        }
-
-        void Select(FieldInfo field)
-        {
-            if (EditorApplication.isPlaying) return;
-            serializedObject.Update();
-            string oldType = serializedObject.FindProperty("varType").stringValue;
-            serializedObject.FindProperty("compName").stringValue = field.DeclaringType.FullName;
-            serializedObject.FindProperty("varName").stringValue = field.Name;
-            serializedObject.FindProperty("varType").stringValue = field.FieldType.AssemblyQualifiedName;
-            if (oldType != field.FieldType.AssemblyQualifiedName)
-            {
-                SerializedProperty list = serializedObject.FindProperty(ListName);
-                for (int i = 0; i < list.arraySize; i++)
-                    list.GetArrayElementAtIndex(i).FindPropertyRelative("checkNum").stringValue = field.FieldType == typeof(string) ? string.Empty : "0";
-            }
-            serializedObject.ApplyModifiedProperties(); DialogueGraphEditor.Invalidate(); window.Repaint();
+            return menu;
         }
     }
 }

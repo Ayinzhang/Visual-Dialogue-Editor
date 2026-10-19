@@ -1,33 +1,40 @@
 namespace DialogueEditor
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
     using UnityEngine;
-    using XNode;
 
-    [Serializable, NodeWidth(350)]
-    public class EventNode : Node
+    [NodeWidth(350)] public class EventNode : BaseNode
     {
-        public enum PortType { Normal, Input, Output, All }
-        [Input] public Nothing before;
-        [HideInInspector] public bool isMin;
-        [HideInInspector] public string abstruct;
-        [HideInInspector] public List<FuncInfo> eventList = new List<FuncInfo>();
-        [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
-
         [Serializable] public class FuncInfo
         {
-            public GameObject obj;
-            [HideInInspector] public PortType portType;
-            [HideInInspector] public string objGlobalId, objPath, compName, funcName, declType, paraType, paraNum;
+            public PortType portType;
+            public string objPath, compName, funcName, paraType, paraNum;
 
-            public void InvokeMethod()
+            public void Invoke()
             {
-                if (!DialogueValidation.TryEvent(this, out Component component, out MethodInfo method, out object[] arguments, out string error))
-                    throw new InvalidOperationException(error);
+                Resolve(out Component component, out MethodInfo method, out object[] arguments);
                 method.Invoke(component, arguments);
             }
+
+            public void Resolve(out Component component, out MethodInfo method, out object[] arguments)
+            {
+                component = DialogueReflection.FindComponent(objPath, compName);
+                Type parameter = string.IsNullOrEmpty(paraType) ? null : Type.GetType(paraType, true);
+                method = component.GetType().GetMethod(funcName, parameter == null ? Type.EmptyTypes : new[] { parameter });
+                if (method == null) throw new MissingMethodException(compName, funcName);
+                arguments = parameter == null ? null : new[] { DialogueReflection.Parse(paraNum, parameter) };
+            }
         }
+
+        [HideInInspector] public List<FuncInfo> eventList = new List<FuncInfo>();
+
+        public override string ListName => nameof(eventList);
+        public override IList Items => eventList;
+        public override bool ItemInputs => true;
+        public override bool HasInput(int index) => (eventList[index].portType & PortType.Input) != 0;
+        public override bool HasOutput(int index) => (eventList[index].portType & PortType.Output) != 0;
     }
 }

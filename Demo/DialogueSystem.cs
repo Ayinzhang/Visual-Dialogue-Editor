@@ -13,82 +13,56 @@ namespace DialogueEditor
 
         Image chaImg;
         Text bgText;
-        Text[] optionTests;
-        bool option, advancing;
+        Text[] optionTexts;
 
-        void OnEnable() { DialogueSettings.LanguageChanged += Refresh; Refresh(); }
-        void OnDisable() { DialogueSettings.LanguageChanged -= Refresh; }
+        void OnEnable() => DialogueSettings.LanguageChanged += Refresh;
+        void OnDisable() => DialogueSettings.LanguageChanged -= Refresh;
 
         void Start()
         {
             chaImg = cha.GetComponent<Image>();
             bgText = bg.GetComponentInChildren<Text>(true);
-            optionTests = new Text[options.Length];
-            for (int i = 0; i < options.Length; i++) optionTests[i] = options[i].GetComponentInChildren<Text>(true);
+            optionTexts = new Text[options.Length];
+            for (int i = 0; i < options.Length; i++) optionTexts[i] = options[i].GetComponentInChildren<Text>(true);
             Init();
         }
 
         public void Init(int graphIndex = 0)
         {
             if (graph != null) { graph.Stop(); Destroy(graph); }
-            graph = Instantiate(graphs[graphIndex]);
-            option = false;
-            for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
-            cha.SetActive(true); bg.SetActive(true);
-            Next();
+            graph = Instantiate(graphs[graphIndex]); Next();
         }
 
         public void Next(int num = -1)
         {
-            if (option && num == -1) return;
-            else if (option)
-            {
-                option = false;
-                for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
-            }
-            DialogueGraph current = graph;
-            advancing = true;
-            try { current.Next(num); }
-            finally { advancing = false; }
-            if (current != graph) return;
-            Draw();
+            if (graph.dataType == DialogueGraph.DataType.Option && num == -1) return;
+            graph.Next(num); DrawInfo();
         }
 
         void Refresh()
         {
-            if (graph == null || advancing) return;
-            graph.GetTypeInfo();
-            Draw();
+            if (graph == null) return;
+            graph.GetInfo(); DrawInfo();
         }
 
-        void Draw()
+        void DrawInfo()
         {
-            switch (graph.dataType)
+            DialogueGraph.DataType type = graph.dataType;
+            cha.SetActive(type != DialogueGraph.DataType.End);
+            bg.SetActive(type != DialogueGraph.DataType.End);
+            for (int i = 0; i < options.Length; i++)
+                options[i].SetActive(type == DialogueGraph.DataType.Option && i < graph.optionInfo.Count);
+            if (type == DialogueGraph.DataType.Dialogue)
             {
-                case DialogueGraph.DataType.Dialogue:
-                    chaImg.sprite = graph.dialogueInfo.sprite;
-                    bgText.text = graph.dialogueInfo.name + ":\n" + graph.dialogueInfo.context;
-                    break;
-                case DialogueGraph.DataType.Option:
-                    option = true;
-                    for (int i = 0; i < options.Length; i++) options[i].SetActive(i < graph.optionInfo.Count);
-                    for (int i = 0; i < graph.optionInfo.Count; i++) optionTests[i].text = graph.optionInfo[i];
-                    break;
-                case DialogueGraph.DataType.End:
-                    cha.SetActive(false); bg.SetActive(false);
-                    for (int i = 0; i < options.Length; i++) options[i].SetActive(false);
-                    break;
+                chaImg.sprite = graph.dialogueInfo.sprite;
+                bgText.text = graph.dialogueInfo.name + ":\n" + graph.dialogueInfo.context;
             }
+            else if (type == DialogueGraph.DataType.Option)
+                for (int i = 0; i < graph.optionInfo.Count; i++) optionTexts[i].text = graph.optionInfo[i];
         }
 
-        void OnDestroy()
-        {
-            Destroy(graph);
-        }
+        void OnDestroy() => Destroy(graph);
 
-        public void DemoPrint(int num)
-        {
-            Debug.Log(cnt += num, this);
-        }
+        public void DemoPrint(int num) => Debug.Log(cnt += num, this);
     }
 }

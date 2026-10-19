@@ -1,14 +1,12 @@
-﻿namespace DialogueEditor
+namespace DialogueEditor
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-    using XNode;
 
-    [Serializable, NodeWidth(350)]
-    public class DialogueNode : Node
+    [NodeWidth(350)] public class DialogueNode : BaseNode
     {
-        public enum PortType { None, Input, Output, All }
         [Serializable] public class DialogueInfo
         {
             public Sprite sprite;
@@ -17,26 +15,12 @@
             public LocalizedText context = new LocalizedText();
         }
 
-        [Input] public Nothing before;
-        [HideInInspector] public bool isMin;
-        [HideInInspector] public string abstruct;
         [HideInInspector] public List<DialogueInfo> dialogueList = new List<DialogueInfo>();
-        [Output(connectionType = ConnectionType.Multiple)] public Nothing after;
 
-        public void EnsureLocalizationData(int languageCount)
-        {
-            for (int i = 0; i < dialogueList.Count; i++)
-                dialogueList[i].context.EnsureLanguageCount(languageCount);
-        }
-
-        public void RemoveLanguage(int languageIndex)
-        {
-            foreach (DialogueInfo line in dialogueList) line.context.RemoveLanguage(languageIndex);
-        }
-
-        public void MoveLanguage(int from, int to)
-        {
-            foreach (DialogueInfo line in dialogueList) line.context.MoveLanguage(from, to);
-        }
+        public override string ListName => nameof(dialogueList);
+        public override IList Items => dialogueList;
+        public override bool ItemInputs => true;
+        public override bool HasInput(int index) => (dialogueList[index].type & PortType.Input) != 0;
+        public override bool HasOutput(int index) => (dialogueList[index].type & PortType.Output) != 0;
     }
 }

@@ -1,265 +1,178 @@
 namespace DialogueEditor
 {
     using System;
-    using System.Globalization;
-    using System.Linq;
+    using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
     using XNode;
     using XNodeEditor;
+    using Object = UnityEngine.Object;
 
     public abstract class DialogueNodeEditorBase : NodeEditor
     {
+        static GUIStyle textStyle;
+
+        protected BaseNode Node => (BaseNode)target;
         protected DialogueGraph Graph => (DialogueGraph)target.graph;
-        protected abstract string ListName { get; }
         protected abstract float RowHeight { get; }
-        protected abstract void DrawItem(Rect rect, int index);
-        protected abstract void InitItem(int index);
-        Type itemType;
-
-        public override void OnCreate()
-        {
-            base.OnCreate();
-            itemType = target.GetType().GetField(ListName).FieldType.GetGenericArguments()[0];
-            if (!EditorApplication.isPlaying) EnsureLocalizationData();
-        }
-
-        public override string GetHeaderTooltip()
-        { return string.Join("\n", DialogueGraphEditor.Issues(Graph).Where(issue => issue.node == target).Select(issue => issue.message)); }
+        protected abstract void DrawItem(Rect rect, SerializedProperty item, int index);
+        protected abstract object NewItem();
+        protected virtual void DrawFields() { }
 
         public override void AddContextMenuItems(GenericMenu menu)
         {
-            if (EditorApplication.isPlaying)
-            { menu.AddDisabledItem(new GUIContent("Read-only during playback")); return; }
             base.AddContextMenuItems(menu);
-            menu.AddSeparator("");
-            menu.AddItem(new GUIContent("Set as Entry"), Graph.entryNode == target, () =>
+            menu.AddItem(new GUIContent("Set as Entry"), Graph.entryNode == Node, () =>
             {
-                Undo.RecordObject(Graph, "Set dialogue entry");
-                Graph.SetEntry(target); EditorUtility.SetDirty(Graph); DialogueGraphEditor.Invalidate();
+                Undo.RecordObject(Graph, "Set Entry Node");
+                Graph.entryNode = Node;
+                DialogueGraphEditor.Invalidate();
             });
+        }
+
+        public override Color GetTint()
+        {
+            if (DialogueGraphEditor.Issues(Graph).Exists(issue => issue.node == Node)) return new Color(0.5f, 0.2f, 0.2f);
+            if (DialogueGraphEditor.Playing(Node) != null) return new Color(0.5f, 0.45f, 0.15f);
+            if (Graph.entryNode == Node) return new Color(0.2f, 0.4f, 0.25f);
+            return base.GetTint();
         }
 
         public override void OnBodyGUI()
         {
-            using (new EditorGUI.DisabledScope(EditorApplication.isPlaying))
+            serializedObject.Update();
+            NodePort before = Node.GetInputPort("before"), after = Node.GetOutputPort("after");
+            if (Node.isMin)
             {
-                serializedObject.Update();
-                bool folded = serializedObject.FindProperty("isMin").boolValue;
-                if (folded)
-                {
-                    NodePort before = target.GetInputPort("before"), after = target.GetOutputPort("after");
-                    NodeEditorGUILayout.PortPair(before, after);
-                    EditorGUILayout.LabelField("Summary", EditorStyles.centeredGreyMiniLabel);
-                    SerializedProperty summary = serializedObject.FindProperty("abstruct");
-                    summary.stringValue = EditorGUILayout.TextArea(summary.stringValue,
-                        new GUIStyle(EditorStyles.textArea) { alignment = TextAnchor.MiddleCenter }, GUILayout.MinHeight(40));
-                    foreach (NodePort port in target.DynamicPorts)
-                        if (NodeEditor.portPositions.TryGetValue(port.IsInput ? before : after, out Vector2 position))
-                            NodeEditor.portPositions[port] = position;
-                }
-                else
-                {
-                    if (target is OptionNode || target is CheckNode)
-                        NodeEditorGUILayout.PortField(new GUIContent("Before"), target.GetInputPort("before"));
-                    DrawFields();
-                    NodeEditorGUILayout.DynamicPortList(ListName, itemType,
-                        serializedObject, NodePort.IO.Output, Node.ConnectionType.Override, Node.TypeConstraint.None, InitList);
-                }
-                if (GUILayout.Button(folded ? "Show more" : "Show less", EditorStyles.miniButton))
-                    serializedObject.FindProperty("isMin").boolValue = !folded;
-                DrawStateBorder(GUILayoutUtility.GetLastRect().yMax + GetBodyStyle().padding.bottom);
-                if (serializedObject.ApplyModifiedProperties())
-                { EditorUtility.SetDirty(target); DialogueGraphEditor.Invalidate(); }
+                NodeEditorGUILayout.PortPair(before, after);
+                SerializedProperty summary = serializedObject.FindProperty("summary");
+                summary.stringValue = EditorGUILayout.TextArea(summary.stringValue, TextStyle);
+                foreach (NodePort port in Node.DynamicPorts)
+                    if (portPositions.TryGetValue(port.IsInput ? before : after, out Vector2 position)) portPositions[port] = position;
             }
-        }
-
-        protected virtual void DrawFields() { }
-
-        void EnsureLocalizationData()
-        {
-            int count = DialogueSettings.Instance.languages.Count;
-            if (target is DialogueNode dialogue) dialogue.EnsureLocalizationData(count);
-            else if (target is OptionNode options) options.EnsureLocalizationData(count);
-        }
-
-        void DrawStateBorder(float height)
-        {
-            Color color;
-            if (DialogueGraphEditor.Issues(Graph).Any(issue => issue.node == target && !issue.deferred)) color = new Color(1f, 0.3f, 0.3f);
-            else if (DialogueGraphEditor.Players(Graph).Any(system => system.graph.node == target))
-                color = new Color(1f, 0.8f, 0.1f);
-            else if (Graph.entryNode == target) color = new Color(0.3f, 0.9f, 0.4f);
-            else return;
-            DrawOutline(new Rect(0, 0, GetWidth(), height), color);
-        }
-
-        protected void DrawPorts(Rect rect, int index)
-        {
-            NodePort input = target.GetInputPort("inList " + index);
-            bool accepts = target is DialogueNode dialogue && (dialogue.dialogueList[index].type & DialogueNode.PortType.Input) != 0 ||
-                target is EventNode events && (events.eventList[index].portType & EventNode.PortType.Input) != 0;
-            if (input != null && accepts) NodeEditorGUILayout.PortField(new Vector2(rect.x - 35, rect.y + 4), input);
-            if (DialogueValidation.HasOutput(target, index))
-                NodeEditorGUILayout.PortField(new Vector2(rect.xMax + 6, rect.y + 4), target.GetOutputPort(DialogueValidation.OutputName(target, index)));
-        }
-
-        protected void Highlight(Rect rect, int index)
-        {
-            if (DialogueGraphEditor.Players(Graph).Any(system => system.graph.node == target &&
-                (target is OptionNode || system.graph.index == index)))
-                DrawOutline(rect, new Color(1f, 0.8f, 0.1f));
-        }
-
-        protected void DrawError(Rect rect, int index)
-        {
-            string error = string.Join("\n", DialogueGraphEditor.Issues(Graph)
-                .Where(issue => issue.node == target && !issue.deferred && (issue.item == index || issue.item == -1)).Select(issue => issue.message));
-            if (string.IsNullOrEmpty(error)) return;
-            DrawOutline(rect, new Color(1f, 0.3f, 0.3f));
-            GUI.Label(new Rect(rect.xMax - 20, rect.y, 20, 18), new GUIContent("!", error), EditorStyles.boldLabel);
-        }
-
-        internal static void DrawOutline(Rect rect, Color color, float width = 2f)
-        {
-            if (Event.current.type != EventType.Repaint) return;
-            EditorGUI.DrawRect(new Rect(rect.x, rect.y, rect.width, width), color);
-            EditorGUI.DrawRect(new Rect(rect.x, rect.yMax - width, rect.width, width), color);
-            EditorGUI.DrawRect(new Rect(rect.x, rect.y, width, rect.height), color);
-            EditorGUI.DrawRect(new Rect(rect.xMax - width, rect.y, width, rect.height), color);
+            else
+            {
+                if (!Node.ItemInputs) NodeEditorGUILayout.PortField(new GUIContent("Before"), before);
+                DrawFields();
+                NodeEditorGUILayout.DynamicPortList(Node.ListName, typeof(XNode.Node.Nothing), serializedObject, NodePort.IO.Output, XNode.Node.ConnectionType.Override, onCreation: InitList);
+            }
+            if (GUILayout.Button(Node.isMin ? "Expand" : "Fold")) serializedObject.FindProperty("isMin").boolValue = !Node.isMin;
+            if (serializedObject.ApplyModifiedProperties()) DialogueGraphEditor.Invalidate();
         }
 
         void InitList(ReorderableList list)
         {
-            bool itemInputs = target is DialogueNode || target is EventNode;
-            if (itemInputs)
-                for (int i = 0; i < DialogueValidation.ItemCount(target); i++)
-                    if (target.GetInputPort("inList " + i) == null)
-                        target.AddDynamicInput(typeof(Node.Nothing), Node.ConnectionType.Multiple, Node.TypeConstraint.None, "inList " + i);
             list.elementHeightCallback = null;
-            list.elementHeight = RowHeight + 8;
+            list.elementHeight = RowHeight;
             list.drawElementCallback = (rect, index, active, focused) =>
             {
-                Rect content = new Rect(rect.x + 4, rect.y + 4, rect.width - 8, RowHeight);
-                DrawItem(content, index);
-                Highlight(new Rect(rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2), index);
-                Rect ports = rect;
-                ports.y += 4;
-                DrawPorts(ports, index);
+                DrawItem(rect, serializedObject.FindProperty(Node.ListName).GetArrayElementAtIndex(index), index);
+                DialogueGraph running = DialogueGraphEditor.Playing(Node);
+                if (running != null && running.index == index) Border(rect, Color.yellow, null);
+                DialogueIssue issue = DialogueGraphEditor.Issues(Graph).Find(i => i.node == Node && i.item == index);
+                if (issue != null) Border(rect, Color.red, issue.message);
+                if (Node.HasOutput(index)) NodeEditorGUILayout.PortField(new Vector2(rect.xMax + 6, rect.y + 8), Node.GetOutputPort(Node.OutputName(index)));
+                if (Node.HasInput(index)) NodeEditorGUILayout.PortField(new Vector2(rect.x - 36, rect.y + 8), InList(index));
             };
+
             var add = list.onAddCallback;
-            list.onAddCallback = value =>
+            list.onAddCallback = l => Change("Add Item", () =>
             {
-                serializedObject.ApplyModifiedProperties(); Node[] nodes = RecordNodes("Add dialogue item");
-                int index = DialogueValidation.ItemCount(target);
-                add(value);
-                InitItem(index);
-                if (itemInputs)
-                    target.AddDynamicInput(typeof(Node.Nothing), Node.ConnectionType.Multiple, Node.TypeConstraint.None, "inList " + index);
-                EnsureLocalizationData();
-                Changed(nodes);
-            };
+                add(l);
+                int index = Node.Count - 1;
+                Node.Items[index] = NewItem();
+                if (Node.ItemInputs) Node.AddDynamicInput(typeof(XNode.Node.Nothing), XNode.Node.ConnectionType.Multiple, XNode.Node.TypeConstraint.None, "inList " + index);
+            });
+
             var remove = list.onRemoveCallback;
-            list.onRemoveCallback = value =>
+            list.onRemoveCallback = l => Change("Remove Item", () =>
             {
-                if (value.index < 0) return;
-                serializedObject.ApplyModifiedProperties(); Node[] nodes = RecordNodes("Remove dialogue item");
-                int count = DialogueValidation.ItemCount(target), removed = value.index;
-                if (itemInputs)
+                if (Node.ItemInputs)
                 {
-                    target.GetInputPort("inList " + removed).ClearConnections();
-                    for (int i = removed + 1; i < count; i++)
-                        MoveConnections(target.GetInputPort("inList " + i), target.GetInputPort("inList " + (i - 1)));
-                    target.RemoveDynamicPort("inList " + (count - 1));
+                    InList(l.index).ClearConnections();
+                    for (int i = l.index + 1; i < Node.Count; i++)
+                        foreach (NodePort output in InList(i).GetConnections())
+                        {
+                            InList(i).Disconnect(output);
+                            InList(i - 1).Connect(output);
+                        }
+                    Node.RemoveDynamicPort("inList " + (Node.Count - 1));
                 }
-                remove(value);
-                Changed(nodes);
-            };
-            int oldIndex = 0;
-            var select = list.onSelectCallback;
-            list.onSelectCallback = value => { oldIndex = value.index; select(value); };
+                remove(l);
+            });
+
             var reorder = list.onReorderCallback;
-            list.onReorderCallback = value =>
+            list.onReorderCallback = null;
+            list.onReorderCallbackWithDetails = (l, from, to) => Change("Move Item", () =>
             {
-                serializedObject.ApplyModifiedProperties(); Node[] nodes = RecordNodes("Reorder dialogue connections");
-                int newIndex = value.index;
-                int direction = oldIndex < newIndex ? 1 : -1;
-                if (itemInputs)
-                    for (int i = oldIndex; i != newIndex; i += direction)
-                        target.GetInputPort("inList " + i).SwapConnections(target.GetInputPort("inList " + (i + direction)));
-                reorder(value);
-                Changed(nodes);
-            };
+                if (Node.ItemInputs)
+                    for (int i = from; i != to; i += from < to ? 1 : -1)
+                        InList(i).SwapConnections(InList(from < to ? i + 1 : i - 1));
+                reorder(l);
+            });
         }
 
-        static void MoveConnections(NodePort source, NodePort destination)
+        NodePort InList(int index) => Node.GetInputPort("inList " + index);
+
+        protected void Change(string label, Action action)
         {
-            if (source == null || destination == null) return;
-            foreach (NodePort other in source.GetConnections().ToArray())
-            { source.Disconnect(other); destination.Connect(other); }
+            serializedObject.ApplyModifiedProperties();
+            var objects = new List<Object> { target };
+            foreach (NodePort port in Node.Ports)
+                foreach (NodePort other in port.GetConnections()) objects.Add(other.node);
+            Undo.RecordObjects(objects.ToArray(), label);
+            action();
+            EditorUtility.SetDirty(target);
+            serializedObject.Update();
+            DialogueGraphEditor.Invalidate();
         }
 
-        Node[] RecordNodes(string label)
+        static void Border(Rect rect, Color color, string tooltip)
         {
-            Node[] nodes = target.Ports.SelectMany(port => port.GetConnections()).Select(port => port.node).Append(target).Distinct().ToArray();
-            Undo.RecordObjects(nodes, label);
-            return nodes;
+            EditorGUI.DrawRect(new Rect(rect.x - 2, rect.y, 2, rect.height), color);
+            EditorGUI.DrawRect(new Rect(rect.xMax, rect.y, 2, rect.height), color);
+            if (tooltip != null) GUI.Label(rect, new GUIContent("", tooltip));
         }
 
-        void Changed(Node[] nodes)
-        {
-            foreach (Node node in nodes) EditorUtility.SetDirty(node);
-            serializedObject.Update(); DialogueGraphEditor.Invalidate(); window.Repaint();
-        }
+        protected static GUIStyle TextStyle => textStyle ?? (textStyle = new GUIStyle(EditorStyles.textArea) { wordWrap = true });
 
-        protected static bool Supported(Type type)
-        { return type.IsEnum || type == typeof(int) || type == typeof(float) || type == typeof(double) || type == typeof(bool) || type == typeof(string); }
-
-        protected GameObject DrawTarget(Rect rect, SerializedProperty owner = null, string label = "")
+        public static void DrawText(Rect rect, SerializedProperty localized)
         {
-            SerializedProperty Find(string name) => owner == null ? serializedObject.FindProperty(name) : owner.FindPropertyRelative(name);
-            SerializedProperty obj = Find("obj"), id = Find("objGlobalId"), path = Find("objPath");
-            SceneObjectReference.TryFind(obj.objectReferenceValue as GameObject, path.stringValue, id.stringValue, out GameObject current, out _);
-            if (!EditorApplication.isPlaying && current != null && obj.objectReferenceValue == null) obj.objectReferenceValue = current;
+            SerializedProperty translations = localized.FindPropertyRelative("translations");
+            int language = DialogueSettings.Language;
+            string text = language < translations.arraySize ? translations.GetArrayElementAtIndex(language).stringValue : "";
             EditorGUI.BeginChangeCheck();
-            GameObject selected = (GameObject)EditorGUI.ObjectField(rect, new GUIContent(label, path.stringValue), current, typeof(GameObject), true);
-            if (EditorGUI.EndChangeCheck())
+            text = EditorGUI.TextArea(rect, text, TextStyle);
+            if (!EditorGUI.EndChangeCheck()) return;
+            while (translations.arraySize <= language)
             {
-                obj.objectReferenceValue = selected;
-                id.stringValue = selected == null ? null : GlobalObjectId.GetGlobalObjectIdSlow(selected).ToString();
-                path.stringValue = selected == null ? null : GetPath(selected);
+                translations.InsertArrayElementAtIndex(translations.arraySize);
+                translations.GetArrayElementAtIndex(translations.arraySize - 1).stringValue = "";
             }
-            return selected;
+            translations.GetArrayElementAtIndex(language).stringValue = text;
         }
 
-        static string GetPath(GameObject obj)
+        protected static void DrawTarget(Rect rect, SerializedProperty path)
         {
-            string path = obj.name;
-            for (Transform parent = obj.transform.parent; parent != null; parent = parent.parent) path = parent.name + "/" + path;
-            return obj.scene.name + "/" + path;
+            EditorGUI.BeginChangeCheck();
+            var picked = (GameObject)EditorGUI.ObjectField(rect, new GUIContent("Target", path.stringValue), DialogueReflection.Find(path.stringValue), typeof(GameObject), true);
+            if (EditorGUI.EndChangeCheck()) path.stringValue = picked == null ? "" : DialogueReflection.GetPath(picked);
         }
 
-        protected static void DrawValue(Rect rect, SerializedProperty value, Type type)
-        {
-            if (!DialogueValidation.TryValue(value.stringValue, type, out object parsed, out string error))
-            {
-                value.stringValue = EditorGUI.TextField(rect, new GUIContent(string.Empty, error), value.stringValue);
-                DrawOutline(rect, new Color(1f, 0.3f, 0.3f)); return;
-            }
-            if (type.IsEnum) value.stringValue = Convert.ToInt64(EditorGUI.EnumPopup(rect, (Enum)parsed)).ToString(CultureInfo.InvariantCulture);
-            else if (type == typeof(bool)) value.stringValue = EditorGUI.Toggle(rect, (bool)parsed) ? "1" : "0";
-            else if (type == typeof(int)) value.stringValue = EditorGUI.IntField(rect, (int)parsed).ToString(CultureInfo.InvariantCulture);
-            else if (type == typeof(float)) value.stringValue = EditorGUI.FloatField(rect, (float)parsed).ToString("R", CultureInfo.InvariantCulture);
-            else if (type == typeof(double)) value.stringValue = EditorGUI.DoubleField(rect, (double)parsed).ToString("R", CultureInfo.InvariantCulture);
-            else value.stringValue = EditorGUI.TextField(rect, value.stringValue);
-        }
+        protected static bool Supported(Type type) =>
+            type == typeof(int) || type == typeof(float) || type == typeof(bool) || type == typeof(string) || type.IsEnum;
 
-        protected void DrawText(Rect rect, SerializedProperty localized)
+        protected static void DrawValue(Rect rect, SerializedProperty text, Type type)
         {
-            int index = DialogueSettings.Language;
-            SerializedProperty text = localized.FindPropertyRelative("translations").GetArrayElementAtIndex(index);
-            text.stringValue = EditorGUI.TextArea(rect, text.stringValue, EditorStyles.textArea);
+            object value = DialogueReflection.Parse(text.stringValue, type);
+            EditorGUI.BeginChangeCheck();
+            if (type == typeof(int)) value = EditorGUI.IntField(rect, (int)value);
+            else if (type == typeof(float)) value = EditorGUI.FloatField(rect, (float)value);
+            else if (type == typeof(bool)) value = EditorGUI.Toggle(rect, (bool)value);
+            else if (type == typeof(string)) value = EditorGUI.TextField(rect, (string)value);
+            else value = EditorGUI.EnumPopup(rect, (Enum)value);
+            if (EditorGUI.EndChangeCheck()) text.stringValue = DialogueReflection.Format(value);
         }
     }
 }

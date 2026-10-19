@@ -1,79 +1,78 @@
 namespace DialogueEditor
 {
     using System.Collections.Generic;
-    using System.Linq;
     using UnityEditor;
+    using UnityEditor.UIElements;
     using UnityEngine;
-    using XNodeEditor;
+    using UnityEngine.UIElements;
     using XNode;
+    using XNodeEditor;
 
-    [CustomNodeGraphEditor(typeof(DialogueGraph))]
+    [InitializeOnLoad, CustomNodeGraphEditor(typeof(DialogueGraph))]
     public class DialogueGraphEditor : NodeGraphEditor
     {
-        DialogueGraph graph => target as DialogueGraph;
         static readonly Dictionary<DialogueGraph, List<DialogueIssue>> issues = new Dictionary<DialogueGraph, List<DialogueIssue>>();
-        static double nextRefresh;
+        static double issuesTime;
 
-        static DialogueGraphEditor()
+        Label issuesLabel;
+        ToolbarButton languageButton;
+
+        static DialogueGraphEditor() => Undo.undoRedoPerformed += Invalidate;
+
+        public static void Invalidate()
         {
-            UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += (scene, mode) => Invalidate();
-            UnityEditor.SceneManagement.EditorSceneManager.sceneClosed += scene => Invalidate();
+            issues.Clear();
+            NodeEditorWindow.RepaintAll();
         }
 
-        public static void Invalidate() { issues.Clear(); nextRefresh = 0; NodeEditorWindow.RepaintAll(); }
         public static List<DialogueIssue> Issues(DialogueGraph graph)
         {
-            if (EditorApplication.timeSinceStartup >= nextRefresh)
-            { issues.Clear(); nextRefresh = EditorApplication.timeSinceStartup + 0.35; }
-            if (!issues.TryGetValue(graph, out List<DialogueIssue> result))
-            {
-                result = DialogueValidation.Validate(graph);
-                issues[graph] = result;
-            }
-            return result;
+            if (EditorApplication.timeSinceStartup - issuesTime > 0.5) { issues.Clear(); issuesTime = EditorApplication.timeSinceStartup; }
+            if (!issues.TryGetValue(graph, out List<DialogueIssue> list)) issues[graph] = list = DialogueValidation.Validate(graph);
+            return list;
         }
 
-        public static IEnumerable<DialogueSystem> Players(DialogueGraph graph)
-        {
-            if (!EditorApplication.isPlaying) return Enumerable.Empty<DialogueSystem>();
-            return UnityEngine.Object.FindObjectsOfType<DialogueSystem>()
-                .Where(system => system.isActiveAndEnabled && system.graph != null &&
-                    system.graph.entryNode != null && system.graph.entryNode.graph == graph);
-        }
+        public static DialogueGraph Playing(Node node) => DialogueGraph.Running.Find(graph => graph.node == node);
+
+        public override bool CanConnect(NodePort output, NodePort input) =>
+            !((BaseNode)output.node).isMin && !((BaseNode)input.node).isMin && DialogueValidation.CanLink(output, input) && base.CanConnect(output, input);
 
         public override void OnOpen()
         {
-            if (!EditorApplication.isPlaying) graph?.EnsureLocalizationData();
-            Invalidate();
-            Undo.undoRedoPerformed -= Invalidate; Undo.undoRedoPerformed += Invalidate;
-            DialogueGraphToolbar.Attach(window);
+            window.rootVisualElement.Q("dialogue-toolbar")?.RemoveFromHierarchy();
+            var toolbar = new Toolbar { name = "dialogue-toolbar" };
+            toolbar.style.position = Position.Absolute;
+            toolbar.style.left = toolbar.style.right = toolbar.style.top = 0;
+            toolbar.Add(new ToolbarButton(() => SettingsService.OpenProjectSettings("Project/Dialogue")) { text = "Languages" });
+            toolbar.Add(new ToolbarButton(() => DialogueSpeakersWindow.Open((DialogueGraph)target)) { text = "Speakers" });
+            toolbar.Add(issuesLabel = new Label());
+            issuesLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            toolbar.Add(new ToolbarSpacer { flex = true });
+            toolbar.Add(languageButton = new ToolbarButton());
+            languageButton.clicked += () =>
+            {
+                var menu = new GenericMenu();
+                List<string> languages = DialogueSettings.Instance.languages;
+                for (int i = 0; i < languages.Count; i++)
+                {
+                    int language = i;
+                    menu.AddItem(new GUIContent(languages[i]), DialogueSettings.Language == i, () => DialogueSettingsEditor.SetLanguage(language));
+                }
+                menu.DropDown(languageButton.worldBound);
+            };
+            window.rootVisualElement.Add(toolbar);
         }
+
         public override void OnGUI()
         {
-            if (window.hoveredPort != null && (Folded(window.hoveredPort.node) ||
-                window.hoveredPort.GetConnections().Any(port => Folded(port.node)))) window.hoveredPort = null;
-            DialogueGraphToolbar.Attach(window);
-            if (EditorApplication.isPlaying) window.Repaint();
-        }
+            if (issuesLabel == null) OnOpen();
+            List<DialogueIssue> list = Issues((DialogueGraph)target);
+            issuesLabel.text = list.Count == 0 ? "No issues" : list.Count + " issue(s)";
+            issuesLabel.tooltip = string.Join("\n", list.ConvertAll(issue => (issue.node == null ? "" : issue.node.name + ": ") + issue.message));
+            languageButton.text = "Language: " + DialogueSettings.Instance.languages[DialogueSettings.Language] + " ▾";
 
-        public static bool Folded(Node node)
-        {
-            if (node is DialogueNode dialogue) return dialogue.isMin;
-            if (node is OptionNode options) return options.isMin;
-            if (node is EventNode events) return events.isMin;
-            return node is CheckNode check && check.isMin;
+            if (window.hoveredPort != null && ((BaseNode)window.hoveredPort.node).isMin && window.hoveredPort.IsDynamic) window.hoveredPort = null;
+            if (Application.isPlaying) window.Repaint();
         }
-
-        public override bool CanConnect(NodePort output, NodePort input)
-        {
-            if (EditorApplication.isPlaying || Folded(output.node) || Folded(input.node)) return false;
-            int count = DialogueValidation.ItemCount(output.node);
-            bool valid = false;
-            for (int i = 0; i < count; i++)
-                if (output.fieldName == DialogueValidation.OutputName(output.node, i)) valid = DialogueValidation.HasOutput(output.node, i);
-            return valid && DialogueValidation.TryDestination(input, out _, out _) && base.CanConnect(output, input);
-        }
-
-        public override string GetPortTooltip(NodePort port) => port.fieldName;
     }
 }
