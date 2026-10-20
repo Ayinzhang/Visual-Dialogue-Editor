@@ -12,12 +12,16 @@ namespace DialogueEditor
         public struct DialogueInfo { public Sprite sprite; public string name, context; }
         [HideInInspector] public List<LocalizedText> speakers = new List<LocalizedText>();
         [HideInInspector] public BaseNode entryNode;
+#if UNITY_EDITOR
+        [HideInInspector] public UnityEditor.SceneAsset editorScene;
+#endif
 
         [NonSerialized] public DataType dataType;
         [NonSerialized] public DialogueInfo dialogueInfo;
         [NonSerialized] public List<string> optionInfo;
         [NonSerialized] public BaseNode node;
         [NonSerialized] public int index;
+        [NonSerialized] public DialogueSystemBase system; // Resolves Event/Check targets for this instance
 
         // Graphs that have started, so editors can show where each one is.
         public static readonly List<DialogueGraph> Running = new List<DialogueGraph>();
@@ -65,12 +69,20 @@ namespace DialogueEditor
             do
             {
                 BaseNode current = node;
-                if (current is EventNode eventNode)
+                int item = index;
+                string output = null;
+                try
                 {
-                    eventNode.eventList[index].Invoke();
-                    if (node == null) return;
+                    if (current is EventNode eventNode) eventNode.eventList[index].Invoke(system);
+                    else if (current is CheckNode checkNode) output = checkNode.Next(system);
                 }
-                if (current is CheckNode checkNode) Follow(checkNode.Next());
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Dialogue graph '" + name + "', node '" + current.name +
+                        "' (#" + nodes.IndexOf(current) + "), item " + item + ": " + (e.InnerException ?? e).Message, e);
+                }
+                if (node == null) return;
+                if (current is CheckNode) Follow(output);
                 else if (current.HasOutput(index)) Follow(current.OutputName(index));
                 else if (++index >= current.Count) node = null;
             } while (node is EventNode || node is CheckNode);

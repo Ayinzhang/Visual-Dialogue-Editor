@@ -215,6 +215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43137aa023c3704dbac65718d980e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bindings:
+    bindings:
+    - key: demo-controller
+      target: {fileID: 76199449}
   cha: {fileID: 1898892948}
   bg: {fileID: 1853730868}
   options:
@@ -425,7 +429,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 76199449}
-        m_TargetAssemblyTypeName: ChatSystem, Assembly-CSharp
+        m_TargetAssemblyTypeName: DialogueEditor.DemoDialogueSystem, Assembly-CSharp
         m_MethodName: Next
         m_Mode: 3
         m_Arguments:
@@ -957,7 +961,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 76199449}
-        m_TargetAssemblyTypeName: ChatSystem, Assembly-CSharp
+        m_TargetAssemblyTypeName: DialogueEditor.DemoDialogueSystem, Assembly-CSharp
         m_MethodName: Next
         m_Mode: 3
         m_Arguments:
@@ -1052,7 +1056,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 76199449}
-        m_TargetAssemblyTypeName: ChatSystem, Assembly-CSharp
+        m_TargetAssemblyTypeName: DialogueEditor.DemoDialogueSystem, Assembly-CSharp
         m_MethodName: Next
         m_Mode: 3
         m_Arguments:

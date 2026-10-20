@@ -17,7 +17,7 @@ namespace DialogueEditor
 
         protected override void DrawFields()
         {
-            DrawTarget(EditorGUILayout.GetControlRect(), serializedObject.FindProperty("objPath"));
+            DrawTarget(EditorGUILayout.GetControlRect(), serializedObject.FindProperty("bindingKey"), Check.compName);
             Rect line = EditorGUILayout.GetControlRect();
             string label = string.IsNullOrEmpty(Check.varName) ? "Select field" : Check.compName.Substring(Check.compName.LastIndexOf('.') + 1) + "." + Check.varName;
             if (EditorGUI.DropdownButton(line, new GUIContent(label), FocusType.Keyboard)) FieldMenu().DropDown(line);
@@ -33,22 +33,29 @@ namespace DialogueEditor
         GenericMenu FieldMenu()
         {
             var menu = new GenericMenu();
-            GameObject obj = DialogueReflection.Find(Check.objPath);
+            GameObject obj = DialogueBindingEditor.Target(DialogueBindingEditor.SceneSystem(out _), Check.bindingKey);
             if (obj == null) { menu.AddDisabledItem(new GUIContent("Assign a target in an open scene")); return menu; }
-            foreach (Component component in obj.GetComponents<Component>())
+            Component[] components = obj.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component == null) continue;
+                string label = DialogueBindingEditor.ComponentName(component, components) + "/";
                 foreach (FieldInfo field in component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
                 {
                     if (!Supported(field.FieldType)) continue;
                     string compName = component.GetType().FullName;
-                    menu.AddItem(new GUIContent(component.GetType().Name + "/" + field.Name), false, () => Change("Select Field", () =>
+                    menu.AddItem(new GUIContent(label + field.Name), false,
+                        () => ChangeBinding("Select Field", component, Check.bindingKey, key =>
                     {
                         if (VarType != field.FieldType)
                             foreach (CheckNode.CheckInfo info in Check.checkList) info.checkNum = field.FieldType == typeof(string) ? "" : "0";
+                        Check.bindingKey = key;
                         Check.compName = compName;
                         Check.varName = field.Name;
                         Check.varType = field.FieldType.AssemblyQualifiedName;
                     }));
                 }
+            }
             return menu;
         }
     }

@@ -3,6 +3,7 @@ namespace DialogueEditor
     using System;
     using System.Collections.Generic;
     using UnityEditor;
+    using UnityEditor.SceneManagement;
     using UnityEditorInternal;
     using UnityEngine;
     using XNode;
@@ -33,7 +34,7 @@ namespace DialogueEditor
 
         public override Color GetTint()
         {
-            if (DialogueGraphEditor.Issues(Graph).Exists(issue => issue.node == Node)) return new Color(0.5f, 0.2f, 0.2f);
+            if (DialogueGraphEditor.Issues(Graph).Exists(issue => issue.node == Node && !issue.unverified)) return new Color(0.5f, 0.2f, 0.2f);
             if (DialogueGraphEditor.Playing(Node) != null) return new Color(0.5f, 0.45f, 0.15f);
             if (Graph.entryNode == Node) return new Color(0.2f, 0.4f, 0.25f);
             return base.GetTint();
@@ -70,7 +71,7 @@ namespace DialogueEditor
                 DrawItem(rect, serializedObject.FindProperty(Node.ListName).GetArrayElementAtIndex(index), index);
                 DialogueGraph running = DialogueGraphEditor.Playing(Node);
                 if (running != null && running.index == index) Border(rect, Color.yellow, null);
-                DialogueIssue issue = DialogueGraphEditor.Issues(Graph).Find(i => i.node == Node && i.item == index);
+                DialogueIssue issue = DialogueGraphEditor.Issues(Graph).Find(i => i.node == Node && i.item == index && !i.unverified);
                 if (issue != null) Border(rect, Color.red, issue.message);
                 if (Node.HasOutput(index)) NodeEditorGUILayout.PortField(new Vector2(rect.xMax + 6, rect.y + 8), Node.GetOutputPort(Node.OutputName(index)));
                 if (Node.HasInput(index)) NodeEditorGUILayout.PortField(new Vector2(rect.x - 36, rect.y + 8), InList(index));
@@ -115,15 +116,21 @@ namespace DialogueEditor
 
         NodePort InList(int index) => Node.GetInputPort("inList " + index);
 
-        protected void Change(string label, Action action)
+        protected void Change(string label, Action action, Object extra = null)
         {
             serializedObject.ApplyModifiedProperties();
             var objects = new List<Object> { target };
+            if (extra != null) objects.Add(extra);
             foreach (NodePort port in Node.Ports)
                 foreach (NodePort other in port.GetConnections()) objects.Add(other.node);
             Undo.RecordObjects(objects.ToArray(), label);
             action();
             EditorUtility.SetDirty(target);
+            if (extra is Component component)
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(component);
+                EditorSceneManager.MarkSceneDirty(component.gameObject.scene);
+            }
             serializedObject.Update();
             DialogueGraphEditor.Invalidate();
         }
@@ -153,11 +160,37 @@ namespace DialogueEditor
             translations.GetArrayElementAtIndex(language).stringValue = text;
         }
 
-        protected static void DrawTarget(Rect rect, SerializedProperty path)
+        protected void DrawTarget(Rect rect, SerializedProperty key, string componentType)
         {
-            EditorGUI.BeginChangeCheck();
-            var picked = (GameObject)EditorGUI.ObjectField(rect, new GUIContent("Target", path.stringValue), DialogueReflection.Find(path.stringValue), typeof(GameObject), true);
-            if (EditorGUI.EndChangeCheck()) path.stringValue = picked == null ? "" : DialogueReflection.GetPath(picked);
+            DialogueSystemBase system = DialogueBindingEditor.SceneSystem(out string issue);
+            using (new EditorGUI.DisabledScope(system == null || Application.isPlaying))
+            {
+                EditorGUI.BeginChangeCheck();
+                var picked = (GameObject)EditorGUI.ObjectField(rect, new GUIContent("Target", issue ?? "Binding is saved in the active scene's Dialogue System."),
+                    DialogueBindingEditor.Target(system, key.stringValue), typeof(GameObject), true);
+                if (!EditorGUI.EndChangeCheck()) return;
+                Object component = picked == null ? null : Array.Find(picked.GetComponents<Component>(), c => c != null && c.GetType().FullName == componentType);
+                ChangeBinding("Assign Dialogue Target", component ?? picked, key.stringValue, value =>
+                {
+                    key.stringValue = value;
+                    serializedObject.ApplyModifiedProperties();
+                });
+            }
+        }
+
+        protected void ChangeBinding(string label, Object target, string key, Action<string> action)
+        {
+            DialogueSystemBase system = DialogueBindingEditor.SceneSystem(out string issue);
+            if (system == null) throw new InvalidOperationException(issue);
+            GameObject obj = target is Component component ? component.gameObject : target as GameObject;
+            string error = Application.isPlaying ? "Exit Play mode before changing scene bindings." :
+                obj != null && obj.scene != system.gameObject.scene ? "Choose a target in the active scene, not an asset or another scene." : null;
+            if (error != null) { EditorUtility.DisplayDialog("Dialogue Binding", error, "OK"); return; }
+            Change(label, () =>
+            {
+                action(target == null ? "" : system.Bindings.Bind(target, key));
+                if (target != null) DialogueBindingEditor.RememberScene(Graph, system.gameObject.scene);
+            }, system);
         }
 
         protected static bool Supported(Type type) =>

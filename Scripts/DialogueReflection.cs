@@ -3,34 +3,15 @@ namespace DialogueEditor
     using System;
     using System.Globalization;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
 
     public static class DialogueReflection
     {
-        public static GameObject Find(string path)
+        public static Component FindComponent(DialogueSystemBase system, string key, string type)
         {
-            if (string.IsNullOrEmpty(path)) return null;
-            string[] names = path.Split(new[] { '/' }, 3);
-            Scene scene = SceneManager.GetSceneByName(names[0]);
-            if (!scene.isLoaded) return null;
-            GameObject root = Array.Find(scene.GetRootGameObjects(), obj => obj.name == names[1]);
-            if (root == null) return null;
-            Transform found = names.Length == 2 ? root.transform : root.transform.Find(names[2]);
-            return found == null ? null : found.gameObject;
-        }
-
-        public static string GetPath(GameObject obj)
-        {
-            string path = obj.name;
-            for (Transform parent = obj.transform.parent; parent != null; parent = parent.parent) path = parent.name + "/" + path;
-            return obj.scene.name + "/" + path;
-        }
-
-        public static Component FindComponent(string path, string type)
-        {
-            GameObject obj = Find(path);
-            Component component = obj == null ? null : Array.Find(obj.GetComponents<Component>(), c => c.GetType().FullName == type);
-            if (component == null) throw new MissingReferenceException("Missing " + type + " at " + path);
+            if (system == null) throw new MissingReferenceException("Dialogue System is missing. Set graph.system before calling Next().");
+            Component component = system.Bindings.Resolve(key);
+            if (component.GetType().FullName != type)
+                throw new InvalidOperationException("Binding " + key + " requires " + type + ", but points to " + component.GetType().FullName);
             return component;
         }
 

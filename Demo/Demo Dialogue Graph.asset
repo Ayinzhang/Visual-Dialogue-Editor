@@ -68,8 +68,8 @@ MonoBehaviour:
       _dynamic: 0
   isMin: 0
   summary: Check
-  objPath: Demo Scene/Canvas/ChatPanel
-  compName: DialogueEditor.DialogueSystem
+  bindingKey: demo-controller
+  compName: DialogueEditor.DemoDialogueSystem
   varName: cnt
   varType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
   checkList:
@@ -248,6 +248,7 @@ MonoBehaviour:
     - ???
     - ???
   entryNode: {fileID: -1819059237232150714}
+  editorScene: {fileID: 102900000, guid: ece8a1ab9b02f4d469db9073379f2307, type: 3}
 --- !u!114 &1769485216659402626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,14 +475,14 @@ MonoBehaviour:
   summary: Event
   eventList:
   - portType: 3
-    objPath: Demo Scene/Canvas/ChatPanel
-    compName: DialogueEditor.DialogueSystem
+    bindingKey: demo-controller
+    compName: DialogueEditor.DemoDialogueSystem
     funcName: DemoPrint
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     paraNum: 0
   - portType: 3
-    objPath: Demo Scene/Canvas/ChatPanel
-    compName: DialogueEditor.DialogueSystem
+    bindingKey: demo-controller
+    compName: DialogueEditor.DemoDialogueSystem
     funcName: DemoPrint
     paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-    paraNum: 1
+    paraNum: 0

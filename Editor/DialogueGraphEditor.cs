@@ -2,6 +2,7 @@ namespace DialogueEditor
 {
     using System.Collections.Generic;
     using UnityEditor;
+    using UnityEditor.SceneManagement;
     using UnityEditor.UIElements;
     using UnityEngine;
     using UnityEngine.UIElements;
@@ -17,7 +18,21 @@ namespace DialogueEditor
         Label issuesLabel;
         ToolbarButton languageButton;
 
-        static DialogueGraphEditor() => Undo.undoRedoPerformed += Invalidate;
+        static DialogueGraphEditor()
+        {
+            Undo.undoRedoPerformed += Invalidate;
+            EditorApplication.hierarchyChanged += Invalidate;
+            EditorSceneManager.activeSceneChangedInEditMode += (_, __) => Invalidate();
+        }
+
+        [UnityEditor.Callbacks.OnOpenAsset(-1)]
+        static bool OpenGraph(int instanceID, int line)
+        {
+            if (!(EditorUtility.InstanceIDToObject(instanceID) is DialogueGraph graph)) return false;
+            NodeEditorWindow window = NodeEditorWindow.Open(graph);
+            EditorApplication.delayCall += () => { if (window != null && window.graph == graph) DialogueBindingEditor.OpenScene(graph); };
+            return true;
+        }
 
         public static void Invalidate()
         {
@@ -67,7 +82,8 @@ namespace DialogueEditor
         {
             if (issuesLabel == null) OnOpen();
             List<DialogueIssue> list = Issues((DialogueGraph)target);
-            issuesLabel.text = list.Count == 0 ? "No issues" : list.Count + " issue(s)";
+            int pending = list.FindAll(issue => issue.unverified).Count, errors = list.Count - pending;
+            issuesLabel.text = list.Count == 0 ? "No issues" : errors == 0 ? pending + " unverified" : errors + " issue(s)" + (pending > 0 ? ", " + pending + " unverified" : "");
             issuesLabel.tooltip = string.Join("\n", list.ConvertAll(issue => (issue.node == null ? "" : issue.node.name + ": ") + issue.message));
             languageButton.text = "Language: " + DialogueSettings.Instance.languages[DialogueSettings.Language] + " ▾";
 

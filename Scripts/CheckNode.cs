@@ -15,15 +15,15 @@ namespace DialogueEditor
             public string checkNum;
         }
 
-        [HideInInspector] public string objPath, compName, varName, varType;
+        [HideInInspector] public string bindingKey, compName, varName, varType;
         [HideInInspector] public List<CheckInfo> checkList = new List<CheckInfo>();
 
         public override string ListName => nameof(checkList);
         public override IList Items => checkList;
 
-        public string Next()
+        public string Next(DialogueSystemBase system)
         {
-            Component component = DialogueReflection.FindComponent(objPath, compName);
+            Component component = DialogueReflection.FindComponent(system, bindingKey, compName);
             FieldInfo field = component.GetType().GetField(varName);
             if (field == null) throw new MissingFieldException(compName, varName);
             IComparable value = (IComparable)field.GetValue(component);

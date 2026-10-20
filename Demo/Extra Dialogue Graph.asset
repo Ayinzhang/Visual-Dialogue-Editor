@@ -733,6 +733,7 @@ MonoBehaviour:
     - Chie
     - "\u5343\u7E6A"
   entryNode: {fileID: 7605061190542546627}
+  editorScene: {fileID: 102900000, guid: ece8a1ab9b02f4d469db9073379f2307, type: 3}
 --- !u!114 &7605061190542546627
 MonoBehaviour:
   m_ObjectHideFlags: 0

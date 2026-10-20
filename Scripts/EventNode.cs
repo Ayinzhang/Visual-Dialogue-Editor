@@ -11,17 +11,17 @@ namespace DialogueEditor
         [Serializable] public class FuncInfo
         {
             public PortType portType;
-            public string objPath, compName, funcName, paraType, paraNum;
+            public string bindingKey, compName, funcName, paraType, paraNum;
 
-            public void Invoke()
+            public void Invoke(DialogueSystemBase system)
             {
-                Resolve(out Component component, out MethodInfo method, out object[] arguments);
+                Resolve(system, out Component component, out MethodInfo method, out object[] arguments);
                 method.Invoke(component, arguments);
             }
 
-            public void Resolve(out Component component, out MethodInfo method, out object[] arguments)
+            public void Resolve(DialogueSystemBase system, out Component component, out MethodInfo method, out object[] arguments)
             {
-                component = DialogueReflection.FindComponent(objPath, compName);
+                component = DialogueReflection.FindComponent(system, bindingKey, compName);
                 Type parameter = string.IsNullOrEmpty(paraType) ? null : Type.GetType(paraType, true);
                 method = component.GetType().GetMethod(funcName, parameter == null ? Type.EmptyTypes : new[] { parameter });
                 if (method == null) throw new MissingMethodException(compName, funcName);
