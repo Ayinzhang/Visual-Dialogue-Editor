@@ -6,53 +6,42 @@ namespace DialogueEditor
 
     public class DialogueSettings : ScriptableObject
     {
-        public List<string> languages = new List<string> { "Default" };
-        public int languageIndex;
-
-        static DialogueSettings instance;
-        static int playLanguage = -1;
+        public List<string> languages = new() { "Default" };
         public static event Action LanguageChanged;
 
-        public static DialogueSettings Instance => instance != null ? instance : instance = Resources.Load<DialogueSettings>("DialogueSettings");
+        // Lazy loading, providing interface for upper-level calls
+        static DialogueSettings instance;
+        public static DialogueSettings Instance => instance ? instance : instance = Resources.Load<DialogueSettings>("DialogueSettings");
 
-        // In play mode the language is switched without touching the asset.
-        public static int Language
+        // Persistence, to save the user's language preference during gameplay
+        const string languageKey = "DialogueEditor.Language";
+        public static int LanguageIndex
         {
-            get => Application.isPlaying && playLanguage >= 0 ? playLanguage : Instance.languageIndex;
+            get
+            {
+                int index = PlayerPrefs.GetInt(languageKey, 0);
+                return 0 <= index && index < Instance.languages.Count ? index : 0;
+            }
             set
             {
-                if (Application.isPlaying) playLanguage = value;
-                else Instance.languageIndex = value;
+                PlayerPrefs.SetInt(languageKey, value);
                 LanguageChanged?.Invoke();
             }
         }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetLanguage() => playLanguage = -1;
     }
 
     [Serializable] public class LocalizedText
     {
-        public List<string> translations = new List<string> { "" };
+        public List<string> translations = new() { "" };
 
-        public string Get(int language) => string.IsNullOrEmpty(GetRaw(language)) ? translations[0] : translations[language];
+        public string GetLanguage(int languageIndex) => translations[languageIndex];
 
-        public string GetRaw(int language) => language < translations.Count ? translations[language] : "";
+        public void AddLanguage() => translations.Add("");
 
-        public void Set(int language, string value)
+        public void RemoveLanguage(int languageIndex) => translations.RemoveAt(languageIndex);
+
+        public void MoveLanguage(int from, int to) // For reorderable list
         {
-            while (translations.Count <= language) translations.Add("");
-            translations[language] = value;
-        }
-
-        public void RemoveLanguage(int language)
-        {
-            if (language < translations.Count) translations.RemoveAt(language);
-        }
-
-        public void MoveLanguage(int from, int to)
-        {
-            Set(Math.Max(from, to), GetRaw(Math.Max(from, to)));
             string text = translations[from];
             translations.RemoveAt(from);
             translations.Insert(to, text);

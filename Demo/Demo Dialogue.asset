@@ -1,0 +1,535 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1822285786687144570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Event
+  m_EditorClassIdentifier: Assembly-CSharp:DialogueEditor:EventNode
+  graph: {fileID: 11400000}
+  position: {x: 232, y: -248}
+  ports:
+    keys:
+    - before
+    - after
+    - eventList 0
+    - inList 0
+    values:
+    - _fieldName: before
+      _node: {fileID: -1822285786687144570}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -1822285786687144570}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: eventList 0
+      _node: {fileID: -1822285786687144570}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 0
+      _node: {fileID: -1822285786687144570}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: optionList 0
+        node: {fileID: 1027751875880944289}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  eventList:
+  - portType: 3
+    bindingKey: demo-controller
+    compName: DialogueEditor.DemoDialogueSystem
+    funcName: DemoPrint
+    paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    paraNum: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4761b0722dfc8aa4fb9515e0c645a9b1, type: 3}
+  m_Name: Demo Dialogue
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 5930754948339637914}
+  - {fileID: 7658445717855440988}
+  - {fileID: 456997048557566844}
+  - {fileID: 5276059696292543439}
+  - {fileID: -1822285786687144570}
+  - {fileID: 1027751875880944289}
+  entryNode: {fileID: 5930754948339637914}
+  speakers:
+  - translations:
+    - Speaker 1
+    - "\u8AAA\u8A71\u4EBA 1"
+  editorScene: {fileID: 102900000, guid: ece8a1ab9b02f4d469db9073379f2307, type: 3}
+--- !u!114 &456997048557566844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Check
+  m_EditorClassIdentifier: Assembly-CSharp:DialogueEditor:CheckNode
+  graph: {fileID: 11400000}
+  position: {x: 104, y: 8}
+  ports:
+    keys:
+    - before
+    - after
+    - checkList 0
+    - checkList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: 456997048557566844}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: optionList 1
+        node: {fileID: 1027751875880944289}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 456997048557566844}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: checkList 0
+      _node: {fileID: 456997048557566844}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 1
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: checkList 1
+      _node: {fileID: 456997048557566844}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 2
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  bindingKey: demo-controller
+  compName: DialogueEditor.DemoDialogueSystem
+  varName: cnt
+  varType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  checkList:
+  - checkType: 0
+    checkNum: 0
+  - checkType: 2
+    checkNum: 0
+--- !u!114 &1027751875880944289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Option
+  m_EditorClassIdentifier: Assembly-CSharp:DialogueEditor:OptionNode
+  graph: {fileID: 11400000}
+  position: {x: -40, y: -248}
+  ports:
+    keys:
+    - before
+    - after
+    - optionList 0
+    - optionList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: 1027751875880944289}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 0
+        node: {fileID: 5930754948339637914}
+        reroutePoints: []
+      - fieldName: dialogueList 0
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 1027751875880944289}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList 0
+      _node: {fileID: 1027751875880944289}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: -1822285786687144570}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: optionList 1
+      _node: {fileID: 1027751875880944289}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: 456997048557566844}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  optionList:
+  - translations:
+    - 2
+    - 2
+  - translations:
+    - 10
+    - 10
+--- !u!114 &5276059696292543439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Event
+  m_EditorClassIdentifier: Assembly-CSharp:DialogueEditor:EventNode
+  graph: {fileID: 11400000}
+  position: {x: 1064, y: -120}
+  ports:
+    keys:
+    - before
+    - after
+    - eventList 0
+    - inList 0
+    values:
+    - _fieldName: before
+      _node: {fileID: 5276059696292543439}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 5276059696292543439}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: eventList 0
+      _node: {fileID: 5276059696292543439}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 0
+      _node: {fileID: 5276059696292543439}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 1
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      - fieldName: dialogueList 2
+        node: {fileID: 7658445717855440988}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  eventList:
+  - portType: 3
+    bindingKey: demo-controller
+    compName: DialogueEditor.DemoDialogueSystem
+    funcName: Switch
+    paraType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    paraNum: 1
+--- !u!114 &5930754948339637914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -468.6667, y: -172.83334}
+  ports:
+    keys:
+    - before
+    - after
+    - dialogueList 0
+    - inList 0
+    values:
+    - _fieldName: before
+      _node: {fileID: 5930754948339637914}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 5930754948339637914}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: dialogueList 0
+      _node: {fileID: 5930754948339637914}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: 1027751875880944289}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 0
+      _node: {fileID: 5930754948339637914}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  dialogueList:
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 2
+    context:
+      translations:
+      - 1+1, which is the answer?
+      - "1+1 \u7684\u7B54\u6848\u662F\u54EA\u500B?"
+--- !u!114 &7658445717855440988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802b0b9f512b57449907cfab9d9d5ab6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 648, y: -168}
+  ports:
+    keys:
+    - before
+    - after
+    - dialogueList 0
+    - inList 0
+    - dialogueList 1
+    - inList 1
+    - dialogueList 2
+    - inList 2
+    values:
+    - _fieldName: before
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: dialogueList 0
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: before
+        node: {fileID: 1027751875880944289}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 0
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: eventList 0
+        node: {fileID: -1822285786687144570}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 1
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 5276059696292543439}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 1
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: checkList 0
+        node: {fileID: 456997048557566844}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: dialogueList 2
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: 5276059696292543439}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: inList 2
+      _node: {fileID: 7658445717855440988}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: checkList 1
+        node: {fileID: 456997048557566844}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  dialogueList:
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context:
+      translations:
+      - Well... Think more carefully
+      - "\u55EF...\u518D\u4ED4\u7D30\u60F3\u60F3"
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context:
+      translations:
+      - Bingo, Congratulations
+      - "\u7B54\u5C0D\u4E86 \u606D\u559C"
+  - sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    person: 0
+    type: 3
+    context:
+      translations:
+      - Yes, That is the answer
+      - "\u5C0D \u5C31\u662F\u9019\u500B\u7B54\u6848"

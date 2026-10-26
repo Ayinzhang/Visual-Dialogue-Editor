@@ -219,13 +219,15 @@ MonoBehaviour:
     bindings:
     - key: demo-controller
       target: {fileID: 76199449}
+    - key: a9c7b75c7e0d4601bcdff0c8c6044b3a
+      target: {fileID: 1898892948}
   cha: {fileID: 1898892948}
   bg: {fileID: 1853730868}
   options:
   - {fileID: 485308290}
   - {fileID: 1509972812}
   graphs:
-  - {fileID: 11400000, guid: e9ddead0fc8f94448945879e31b3682e, type: 2}
+  - {fileID: 11400000, guid: 377bea2e8956c5c4ab4efdf566b547f5, type: 2}
   - {fileID: 11400000, guid: cb9d4e1dd07a3534b809ba26264b2015, type: 2}
   cnt: 0
 --- !u!1 &179482560

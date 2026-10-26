@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8488574972809093742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Option
+  m_EditorClassIdentifier: Assembly-CSharp:DialogueEditor:OptionNode
+  graph: {fileID: 11400000}
+  position: {x: -200, y: -280}
+  ports:
+    keys:
+    - before
+    - after
+    - optionList 0
+    - optionList 1
+    values:
+    - _fieldName: before
+      _node: {fileID: -8488574972809093742}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: dialogueList 6
+        node: {fileID: 7605061190542546627}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: after
+      _node: {fileID: -8488574972809093742}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: optionList 0
+      _node: {fileID: -8488574972809093742}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 0
+        node: {fileID: -7156879366625017116}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: optionList 1
+      _node: {fileID: -8488574972809093742}
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: inList 3
+        node: {fileID: -7156879366625017116}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  isFolded: 0
+  summary: 
+  optionList:
+  - translations:
+    - What a strange person...
+    - "\u5947\u602A\u7684\u4EBA..."
+  - translations:
+    - Throw it away...?
+    - "\u6254\u6389...?"
 --- !u!114 &-7156879366625017116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,11 +116,11 @@ MonoBehaviour:
     values:
     - _fieldName: inList 0
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: optionList 0
-        node: {fileID: -638595666157657635}
+        node: {fileID: -8488574972809093742}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -62,8 +137,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 1
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -80,8 +155,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 2
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -98,11 +173,11 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 3
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: optionList 1
-        node: {fileID: -638595666157657635}
+        node: {fileID: -8488574972809093742}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -119,8 +194,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 4
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -137,8 +212,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 5
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -155,8 +230,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 6
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -173,8 +248,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 7
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -191,8 +266,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 8
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -209,8 +284,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 9
       _node: {fileID: -7156879366625017116}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -246,7 +321,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  isMin: 0
+  isFolded: 0
   summary: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}
@@ -360,8 +435,8 @@ MonoBehaviour:
     values:
     - _fieldName: inList 0
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: dialogueList 9
         node: {fileID: -7156879366625017116}
@@ -381,8 +456,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 1
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -399,8 +474,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 2
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -417,8 +492,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 3
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -435,8 +510,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 4
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -453,8 +528,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 5
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -471,8 +546,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 6
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -489,8 +564,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 7
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -507,8 +582,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 8
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -525,8 +600,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 9
       _node: {fileID: -1608095426900796545}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -559,7 +634,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  isMin: 0
+  isFolded: 0
   summary: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: 9e2c9d5b74f63464b9a6297a9b138259, type: 3}
@@ -633,81 +708,6 @@ MonoBehaviour:
       - And there are as many people who'll keep improving as there are stars in
         the sky.
       - "\u7136\u5F8C\u5728\u54EA\u88CF\u8CB7\u7684\u6703\u7E7C\u7E8C\u9032\u6B65\u7684\u4EBA\u4E5F\u591A\u5982\u5929\u4E0A\u7684\u7E41\u661F"
---- !u!114 &-638595666157657635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7a2a97bbba94c04ba6f3f4892417358, type: 3}
-  m_Name: Option
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: -200, y: -280}
-  ports:
-    keys:
-    - before
-    - optionList 0
-    - optionList 1
-    - after
-    values:
-    - _fieldName: before
-      _node: {fileID: -638595666157657635}
-      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections:
-      - fieldName: dialogueList 6
-        node: {fileID: 7605061190542546627}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: optionList 0
-      _node: {fileID: -638595666157657635}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: inList 0
-        node: {fileID: -7156879366625017116}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: optionList 1
-      _node: {fileID: -638595666157657635}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: inList 3
-        node: {fileID: -7156879366625017116}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: after
-      _node: {fileID: -638595666157657635}
-      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  isMin: 0
-  summary: 
-  optionList:
-  - translations:
-    - What a strange person...
-    - "\u5947\u602A\u7684\u4EBA..."
-  - translations:
-    - Throw it away...?
-    - "\u6254\u6389...?"
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -722,9 +722,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 7605061190542546627}
-  - {fileID: -638595666157657635}
   - {fileID: -7156879366625017116}
   - {fileID: -1608095426900796545}
+  - {fileID: -8488574972809093742}
+  entryNode: {fileID: 7605061190542546627}
   speakers:
   - translations:
     - Hikari
@@ -732,7 +733,6 @@ MonoBehaviour:
   - translations:
     - Chie
     - "\u5343\u7E6A"
-  entryNode: {fileID: 7605061190542546627}
   editorScene: {fileID: 102900000, guid: ece8a1ab9b02f4d469db9073379f2307, type: 3}
 --- !u!114 &7605061190542546627
 MonoBehaviour:
@@ -769,8 +769,8 @@ MonoBehaviour:
     values:
     - _fieldName: inList 0
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -787,8 +787,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 1
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -805,8 +805,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 2
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -823,8 +823,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 3
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -841,8 +841,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 4
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -859,8 +859,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 5
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -877,8 +877,8 @@ MonoBehaviour:
       _dynamic: 1
     - _fieldName: inList 6
       _node: {fileID: 7605061190542546627}
-      _typeQualifiedName: DialogueNode+Anything, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: XNode.Node+Nothing, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 0
       _connectionType: 0
@@ -890,7 +890,7 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: before
-        node: {fileID: -638595666157657635}
+        node: {fileID: -8488574972809093742}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -914,7 +914,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  isMin: 0
+  isFolded: 0
   summary: 
   dialogueList:
   - sprite: {fileID: 21300000, guid: a852d2b82156e814fb87401d161bacb1, type: 3}

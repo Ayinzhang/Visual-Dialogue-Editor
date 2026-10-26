@@ -10,55 +10,53 @@ namespace DialogueEditor
     {
         public enum DataType { End, Dialogue, Option }
         public struct DialogueInfo { public Sprite sprite; public string name, context; }
-        [HideInInspector] public List<LocalizedText> speakers = new List<LocalizedText>();
-        [HideInInspector] public BaseNode entryNode;
+        [HideInInspector] public NodeBase entryNode;
+        [HideInInspector] public List<LocalizedText> speakers = new();
 #if UNITY_EDITOR
-        [HideInInspector] public UnityEditor.SceneAsset editorScene;
+        [HideInInspector] public UnityEditor.SceneAsset editorScene; // Open the edit scene when this graph is opened
 #endif
 
+        [NonSerialized] public DialogueSystemBase system; // Resolves Event/Check targets for this instance
         [NonSerialized] public DataType dataType;
         [NonSerialized] public DialogueInfo dialogueInfo;
         [NonSerialized] public List<string> optionInfo;
-        [NonSerialized] public BaseNode node;
+        [NonSerialized] public NodeBase node;
         [NonSerialized] public int index;
-        [NonSerialized] public DialogueSystemBase system; // Resolves Event/Check targets for this instance
 
-        // Graphs that have started, so editors can show where each one is.
-        public static readonly List<DialogueGraph> Running = new List<DialogueGraph>();
+        public static readonly List<DialogueGraph> RunningGraphs = new(); // Graphs that have started, so editors can show running info
 
         bool init;
 
-        public DataType Next(int num = -1)
+        public void Next(int num = -1) // -1: continue, 0+: option index
         {
             if (0 <= num) index = num;
-            if (!init) { node = entryNode; index = 0; init = true; Running.Add(this); }
-            else if (dataType != DataType.End) MoveOn();
-            if (node is EventNode || node is CheckNode) MoveOn();
-            GetInfo(); return dataType;
+            if (!init) { init = true; node = entryNode; index = -1; RunningGraphs.Add(this); }
+            MoveOn(); GetInfo();
         }
 
-        public void Stop() => node = null;
-
-        protected override void OnDestroy()
+        public void Resume() // Continue after the switched graph ends
         {
-            Running.Remove(this);
-            base.OnDestroy();
-        } // Called by events that switch to another graph
+            if (node is EventNode)
+                if (node.HasOutput(index)) Follow(node.OutputName(index));
+                else if (++index >= node.Items.Count) node = null;
+            if (node is EventNode || node is CheckNode) MoveOn();
+            GetInfo();
+        }
 
         public void GetInfo()
         {
-            int language = DialogueSettings.Language;
+            int languageIndex = DialogueSettings.LanguageIndex;
             if (node is DialogueNode dialogueNode)
             {
-                DialogueNode.DialogueInfo line = dialogueNode.dialogueList[index];
-                dialogueInfo.sprite = line.sprite;
-                dialogueInfo.name = line.person < 0 ? "" : speakers[line.person].Get(language);
-                dialogueInfo.context = line.context.Get(language);
+                DialogueNode.DialogueInfo lnfo = dialogueNode.dialogueList[index];
+                dialogueInfo.sprite = lnfo.sprite;
+                dialogueInfo.name = lnfo.person < 0 ? "" : speakers[lnfo.person].GetLanguage(languageIndex);
+                dialogueInfo.context = lnfo.context.GetLanguage(languageIndex);
                 dataType = DataType.Dialogue;
             }
             else if (node is OptionNode optionNode)
             {
-                optionInfo = optionNode.optionList.ConvertAll(option => option.Get(language));
+                optionInfo = optionNode.optionList.ConvertAll(option => option.GetLanguage(languageIndex));
                 dataType = DataType.Option;
             }
             else dataType = DataType.End;
@@ -66,39 +64,30 @@ namespace DialogueEditor
 
         void MoveOn()
         {
+            if (index < 0) { index = 0; if (node is not EventNode && node is not CheckNode) return; }
+
             do
             {
-                BaseNode current = node;
-                int item = index;
-                string output = null;
-                try
-                {
-                    if (current is EventNode eventNode) eventNode.eventList[index].Invoke(system);
-                    else if (current is CheckNode checkNode) output = checkNode.Next(system);
-                }
-                catch (Exception e)
-                {
-                    throw new InvalidOperationException("Dialogue graph '" + name + "', node '" + current.name +
-                        "' (#" + nodes.IndexOf(current) + "), item " + item + ": " + (e.InnerException ?? e).Message, e);
-                }
-                if (node == null) return;
-                if (current is CheckNode) Follow(output);
-                else if (current.HasOutput(index)) Follow(current.OutputName(index));
-                else if (++index >= current.Count) node = null;
+                if (node is EventNode eventNode) eventNode.eventList[index].Invoke(system);
+                if (!node || system.graph != this) return;
+
+                if (node is CheckNode checkNode) Follow(checkNode.Next(system));
+                else if (node.HasOutput(index)) Follow(node.OutputName(index));
+                else if (++index >= node.Items.Count) node = null;
             } while (node is EventNode || node is CheckNode);
         }
 
         void Follow(string output)
         {
             NodePort input = output == null ? null : node.GetOutputPort(output).Connection;
-            node = input == null ? null : (BaseNode)input.node;
-            index = input == null ? 0 : Mathf.Max(0, BaseNode.Item(input));
+            node = input == null ? null : (NodeBase)input.node;
+            index = input == null ? 0 : Mathf.Max(0, NodeBase.ItemIndex(input));
         }
 
         public override Node AddNode(Type type)
         {
             Node added = base.AddNode(type);
-            if (entryNode == null) entryNode = (BaseNode)added;
+            if (entryNode == null) entryNode = (NodeBase)added;
             return added;
         }
 
@@ -106,6 +95,12 @@ namespace DialogueEditor
         {
             if (entryNode == removed) entryNode = null;
             base.RemoveNode(removed);
+        }
+
+        protected override void OnDestroy()
+        {
+            RunningGraphs.Remove(this);
+            base.OnDestroy();
         }
     }
 }
